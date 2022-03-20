@@ -5,34 +5,15 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 async function renderFragment(fragment: any) {
 	const doc = await loadDocument(fragment.url.href)
-	// await 	delay(5000)
-	await delay(100) // todo wut
 
 	console.log(doc)
-	//todo all directives
+	//todo process all directives
 	const ranges = utils.processTextFragmentDirective(fragment.directives[0], doc)
+	fragment.element.appendChild(ranges[0].commonAncestorContainer)
 	console.log({ranges})
 }
 
-function markInPageFragments() {
-	let hash = document.location.hash
-	if (!hash) {
-		const fullUrl = performance.getEntries().find(({entryType}) => entryType === 'navigation',)?.name
-		if(fullUrl) hash = new URL(fullUrl).hash
-	}
-	const fragmentDirectives = utils.getFragmentDirectives(hash)
-	const parsedFragmentDirectives = utils.parseFragmentDirectives(
-		fragmentDirectives,
-	)
-	const processedFragmentDirectives = utils.processFragmentDirectives(
-		parsedFragmentDirectives,
-	)
-	console.log({parsedFragmentDirectives, processedFragmentDirectives})
-}
-
 async function init() {
-	//todo
-	await delay(200)
 	const fragments = parseFragments(getTextFragmentLinks())
 	/**
 	 * apparently google blog was a shitty example to start with, because without some js
@@ -41,7 +22,8 @@ async function init() {
 	// const fragments = parseFragments([new URL('https://danluu.com/p95-skill/#:~:text=we\'ll%20start%20by%20looking%20at%20overwatch')])
 	console.log({fragments: fragments})
 
-	await renderFragment(fragments[0])
+	// await renderFragment(fragments[0])
+	fragments.map(renderFragment)
 	// await delay(100) // todo wut
 	// markInPageFragments()
 }
