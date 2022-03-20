@@ -15,13 +15,13 @@
 		"128": "icon.png"
 	},
 	"permissions": [
-		"https://github.com/fregante/browser-extension-template/*",
+       "<all_urls>",
 		"storage"
 	],
-	"content_scripts": [ 
+	"content_scripts": [
 		{
-			"matches": [ "https://github.com/fregante/browser-extension-template/*" ],
-			"js": [ "content.js" ],
+			"matches": ["<all_urls>"],
+			"js": [ "content.ts" ],
 			"css": [ "content.css" ],
 			"run_at": "document_end"
 		}
@@ -33,7 +33,7 @@
 	"background": {
 		"persistent": false,
 		"scripts": [
-			"background.js"
+			"background.ts"
 		]
 	}
 }
