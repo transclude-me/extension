@@ -7,6 +7,6 @@ browser.runtime.onMessage.addListener(async (message: any, sender: any) => {
 	console.log('background.ts:', message, sender)
 	if (message.type === 'fetch-background') {
 		const response = await fetch(message.url)
-		return await response.text()
+		return response.text()
 	}
 })

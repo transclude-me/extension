@@ -1,22 +1,36 @@
 import * as utils from 'text-fragments-polyfill/src/text-fragment-utils'
 import * as browser from 'webextension-polyfill'
 import {renderPreview} from "./preview"
-
-import './content.css'
+import tippy from "tippy.js"
+// import 'tippy.js/dist/tippy.css'
+// todo
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
-async function renderFragment(fragment: any) {
+async function getHighlightedPageElements(fragment: any) {
 	const doc = await loadDocument(fragment.url.href)
 
 	console.log(doc)
 	//todo process all directives
-	// const ranges = utils.processTextFragmentDirective(fragment.directives[0], doc)
-	// fragment.element.appendChild(ranges[0].commonAncestorContainer)
-	// renderPreview(fragment.element)
+	// const ranges: Range[] = utils.processTextFragmentDirective(fragment.directives.text[0], doc)
 
-	renderPreview(fragment.element, await getPageHtml(fragment.url.href))
-	// console.log({ranges})
+	const elements: Element[] = utils.processFragmentDirectives(fragment.directives, doc).text
+	console.log({elements})
+	return elements
+}
+
+async function renderFragment(fragment: any) {
+	const elements = await getHighlightedPageElements(fragment)
+
+	const preview = renderPreview(elements.flat().map(it=> it.parentElement))
+	tippy(fragment.element, {
+		content: preview,
+		arrow: true,
+		animation: 'fade',
+		interactive: true,
+	})
+
+	// maybe let the utils do markup processing. and then do range finding again and take a parent of the marked up element?
 }
 
 async function init() {
@@ -43,23 +57,20 @@ const parseFragments = (fragments) => {
 	return fragments.map(it => {
 		const url = new URL(it.href)
 		const fragmentDirectives = utils.getFragmentDirectives(url.hash)
-		utils.parseFragmentDirectives(fragmentDirectives)
 		return {
 			url,
 			element: it,
-			directives: utils.parseFragmentDirectives(fragmentDirectives).text,
+			directives: utils.parseFragmentDirectives(fragmentDirectives),
 		}
 	})
 }
 
+// todo cache
 const getPageHtml = async (url: string) =>
-	await browser.runtime.sendMessage({type: 'fetch-background', url})
+	browser.runtime.sendMessage({type: 'fetch-background', url})
 
 const loadDocument = async (url: string) => {
-	// const fetched = await fetch(url)
-	const fetched = await getPageHtml(url)
-
-	return new DOMParser().parseFromString(await fetched, 'text/html')
+	return new DOMParser().parseFromString(await getPageHtml(url), 'text/html')
 }
 
 init()

@@ -3,10 +3,10 @@ import {useEffect, useRef} from "react"
 
 // import './index.css'
 
-function Preview({html, importedComponents}) {
+function Preview({importedComponents}) {
 	const ref = useRef(null)
 	useEffect(() => {
-		// ref?.current?.append(...importedComponents)
+		ref?.current?.append(...importedComponents)
 	})
 	// return <iframe
 	// 	srcDoc={html}
@@ -15,13 +15,16 @@ function Preview({html, importedComponents}) {
 	// 		height: '50em',
 	// 	}}
 	// />
-	return <div dangerouslySetInnerHTML={{__html: html}} />
-	// return <div ref={ref}></div>
+	// return <div dangerouslySetInnerHTML={{__html: html}} />
+	return <div ref={ref}/>
 }
 
-export const renderPreview = (container, html) => {
+export const renderPreview = (importedComponents) => {
 	const renderContainer = document.createElement('div');
-	container.appendChild(renderContainer)
+	renderContainer.className = 'preview-container'
+	// container.appendChild(renderContainer)
 
-	ReactDOM.render(<Preview html={html} />, renderContainer)
+	ReactDOM.render(<Preview importedComponents={importedComponents} />, renderContainer)
+
+	return renderContainer
 }
