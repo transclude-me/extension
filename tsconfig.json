@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-	"isolatedModules": true
+	"isolatedModules": true,
+	"jsx": "react-jsx",
+	"jsxImportSource": "@emotion/react",
   },
   "include": ["source/**/*"],
   "lib": ["es2021"],

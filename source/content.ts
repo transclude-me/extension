@@ -1,5 +1,8 @@
 import * as utils from 'text-fragments-polyfill/src/text-fragment-utils'
 import * as browser from 'webextension-polyfill'
+import {renderPreview} from "./preview"
+
+import './content.css'
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -8,12 +11,17 @@ async function renderFragment(fragment: any) {
 
 	console.log(doc)
 	//todo process all directives
-	const ranges = utils.processTextFragmentDirective(fragment.directives[0], doc)
-	fragment.element.appendChild(ranges[0].commonAncestorContainer)
-	console.log({ranges})
+	// const ranges = utils.processTextFragmentDirective(fragment.directives[0], doc)
+	// fragment.element.appendChild(ranges[0].commonAncestorContainer)
+	// renderPreview(fragment.element)
+
+	renderPreview(fragment.element, await getPageHtml(fragment.url.href))
+	// console.log({ranges})
 }
 
 async function init() {
+	//todo: this should have 2 modes: on-demand and render everything on load
+
 	const fragments = parseFragments(getTextFragmentLinks())
 	/**
 	 * apparently google blog was a shitty example to start with, because without some js
@@ -22,10 +30,7 @@ async function init() {
 	// const fragments = parseFragments([new URL('https://danluu.com/p95-skill/#:~:text=we\'ll%20start%20by%20looking%20at%20overwatch')])
 	console.log({fragments: fragments})
 
-	// await renderFragment(fragments[0])
 	fragments.map(renderFragment)
-	// await delay(100) // todo wut
-	// markInPageFragments()
 }
 
 const getTextFragmentLinks = () => {
@@ -47,9 +52,12 @@ const parseFragments = (fragments) => {
 	})
 }
 
+const getPageHtml = async (url: string) =>
+	await browser.runtime.sendMessage({type: 'fetch-background', url})
+
 const loadDocument = async (url: string) => {
 	// const fetched = await fetch(url)
-	const fetched = await browser.runtime.sendMessage({type: 'fetch-background', url})
+	const fetched = await getPageHtml(url)
 
 	return new DOMParser().parseFromString(await fetched, 'text/html')
 }
