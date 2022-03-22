@@ -9,8 +9,6 @@ async function getHighlightedPageElements(fragment: any) {
 	const doc = await loadDocument(fragment.url.href)
 
 	console.log(doc)
-	//todo process all directives
-	// const ranges: Range[] = utils.processTextFragmentDirective(fragment.directives.text[0], doc)
 
 	const elements: Element[] = utils.processFragmentDirectives(fragment.directives, doc).text
 	console.log({elements})
@@ -20,6 +18,11 @@ async function getHighlightedPageElements(fragment: any) {
 async function renderFragment(fragment: any) {
 	const elements = await getHighlightedPageElements(fragment)
 
+	// todo render placeholder initially & defer actual loading of the fragment by passing in a function
+	/**
+	 * todo parent is actually a bad abstraction here - only works for withing paragraph highlights
+	 * for headers - probably want to include the following paragraph
+	 */
 	const preview = renderPreview(elements.flat().map(it=> it.parentElement))
 	tippy(fragment.element, {
 		content: preview,
@@ -72,5 +75,3 @@ const loadDocument = async (url: string) => {
 }
 
 init()
-
-console.log("syncing")
