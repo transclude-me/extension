@@ -1,9 +1,7 @@
 import * as utils from 'text-fragments-polyfill/src/text-fragment-utils'
 import * as browser from 'webextension-polyfill'
-import {renderPreview} from "./preview"
+import {renderPreview} from './preview'
 import tippy from "tippy.js"
-// import 'tippy.js/dist/tippy.css'
-// todo
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -28,6 +26,7 @@ async function renderFragment(fragment: any) {
 		arrow: true,
 		animation: 'fade',
 		interactive: true,
+		theme: 'light',
 	})
 
 	// maybe let the utils do markup processing. and then do range finding again and take a parent of the marked up element?
@@ -41,7 +40,6 @@ async function init() {
 	 * apparently google blog was a shitty example to start with, because without some js
 	 * the getAllTextNodes returns incomplete/weird results
 	 */
-	// const fragments = parseFragments([new URL('https://danluu.com/p95-skill/#:~:text=we\'ll%20start%20by%20looking%20at%20overwatch')])
 	console.log({fragments: fragments})
 
 	fragments.map(renderFragment)

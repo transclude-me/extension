@@ -3,8 +3,8 @@
 	"isolatedModules": true,
 	"jsx": "react-jsx",
 	"jsxImportSource": "@emotion/react",
+	"target": "es2021",
+	"moduleResolution": "Node"
   },
-  "include": ["source/**/*"],
-  "lib": ["es2021"],
-  "target": "es2021"
+  "include": ["source/**/*"]
 }
