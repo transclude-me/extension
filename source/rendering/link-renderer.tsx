@@ -2,6 +2,8 @@ import {ReactElement} from "react"
 import * as ReactDOM from "react-dom"
 
 import {TextFragmentRenderer} from "./text-fragment-renderer"
+import {IframeRenderer} from "./iframe-renderer"
+import {WikipediaRenderer} from "./wikipedia-renderer"
 
 export interface LinkRenderer {
 	canRender(url: URL): boolean
@@ -14,6 +16,8 @@ export interface LinkRenderer {
  */
 const allRenderers: LinkRenderer[] = [
 	new TextFragmentRenderer(),
+	new WikipediaRenderer(),
+	new IframeRenderer(),
 ]
 
 export const render = async (link: URL, renderers: LinkRenderer[] = allRenderers): Promise<HTMLElement | null> => {

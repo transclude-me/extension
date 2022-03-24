@@ -7,10 +7,12 @@ async function initPreview(link: HTMLAnchorElement | HTMLAreaElement) {
 
 	tippy(link, {
 		content: previewElement,
+		placement: "bottom",
 		arrow: true,
 		animation: 'fade',
 		interactive: true,
 		theme: 'light',
+		maxWidth: '100%',
 	})
 }
 

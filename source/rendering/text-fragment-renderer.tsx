@@ -17,26 +17,28 @@ export class TextFragmentRenderer implements LinkRenderer {
 	async render(url: URL): Promise<ReactElement> {
 		const fragmentDirectives = parseFragmentDirectives(getFragmentDirectives(url.hash))
 
-		const elements = await getHighlightedPageElements(url, fragmentDirectives)
+		const elementsByFragment = await getHighlightedPageElements(url, fragmentDirectives)
 
-		// todo render placeholder initially & defer actual loading of the fragment by passing in a function
 		/**
 		 * todo parent is actually a bad abstraction here - only works for withing paragraph highlights
 		 * for headers - probably want to include the following paragraph
 		 */
-		// const preview = renderPreview(elements.flat().map(it=> it.parentElement))
-
-		return <RawElementAdapter elements={elements.flat().map(it => it.parentElement)}/>
+		return <div>
+			{elementsByFragment.map(elements =>
+				<RawElementAdapter
+					elements={elements.map(it => it.parentElement)}
+				/>)}
+		</div>
 	}
 }
 
 
-async function getHighlightedPageElements(url: URL, directives): Promise<Node[]> {
+async function getHighlightedPageElements(url: URL, directives): Promise<Array<Node[]>> {
 	const doc = await loadDocument(url)
 
 	console.log(doc)
 
-	const elements: Element[] = processFragmentDirectives(directives, doc).text
+	const elements = processFragmentDirectives(directives, doc).text
 	console.log({elements})
 	return elements
 }
