@@ -10,7 +10,7 @@ import * as browser from "webextension-polyfill"
 import {RawElementAdapter} from "./components/RawElementAdapter"
 
 export class TextFragmentRenderer implements LinkRenderer {
-	async canRender(url: URL): Promise<boolean> {
+	canRender(url: URL): boolean {
 		return url.href.indexOf(":~:") !== -1
 	}
 
@@ -49,4 +49,3 @@ const loadDocument = async (url: URL) => {
 // todo cache
 const getPageHtml = async (url: URL) =>
 	browser.runtime.sendMessage({type: 'fetch-background', url: url.href})
-

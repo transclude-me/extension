@@ -4,7 +4,7 @@ import * as ReactDOM from "react-dom"
 import {TextFragmentRenderer} from "./text-fragment-renderer"
 
 export interface LinkRenderer {
-	canRender(url: URL): Promise<boolean>
+	canRender(url: URL): boolean
 
 	render(url: URL): Promise<ReactElement>
 }
@@ -17,13 +17,21 @@ const allRenderers: LinkRenderer[] = [
 ]
 
 export const render = async (link: URL, renderers: LinkRenderer[] = allRenderers): Promise<HTMLElement | null> => {
-	const reactElement = await buildReactComponent(renderers, link)
-	if (!reactElement) return null
+	// Do pre-check,so we can assume something is going to render and do that async
+	if (!canRender(link, renderers)) return null
 
 	const renderContainer = defaultRenderContainer()
-	ReactDOM.render(reactElement, renderContainer)
+	buildReactComponent(renderers, link).then(component => {
+		//todo common loading indicator
+		ReactDOM.render(component, renderContainer)
+	})
 	return renderContainer
 }
+
+const canRender = (link: URL, renderers: LinkRenderer[] = allRenderers): boolean =>
+	allRenderers.some(renderer => {
+		if (renderer.canRender(link)) return true
+	})
 
 const buildReactComponent = (renderers: LinkRenderer[], link: URL) =>
 	renderers.find(r => r.canRender(link))?.render(link)
