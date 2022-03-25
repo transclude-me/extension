@@ -5,11 +5,13 @@ import {css} from "@emotion/react"
 export class IframeRenderer implements LinkRenderer {
 	canRender(url: URL): boolean {
 		// todo allow people to configure whitelist
-		return whitelistDomains.some(domain => url.hostname.indexOf(domain) !== -1)
+		return whitelistDomains.some(domain => url.hostname.indexOf(domain) !== -1) ||
+			allowSubdomainsFrom.some(domain => url.hostname.endsWith(domain))
 	}
 
 	async render(url: URL): Promise<ReactElement> {
-		console.log("iframe render", url)
+		// todo right now the iframe is not preserved on consequtive views?
+		// I think that can be tippy's problem though
 		return <iframe
 			src={url.href}
 			css={css`
@@ -867,7 +869,17 @@ const goodGwernDomains = [
 	, "www.unf.edu",
 ]
 
+const allowSubdomainsFromGwern =
+	[".allennlp.org", ".archive.org", ".archiveteam.org", ".bandcamp.com", ".eleuther.ai", ".fandom.com",
+		".github.io", ".givewell.org", ".greenspun.com", ".humanprogress.org", ".imagemagick.org", ".mementoweb.org",
+		".metafilter.com", ".nomeata.de", ".obormot.net", ".tumblr.com", ".xkcd.com", ".wikipedia.org", ".wordpress.com",
+		".blogspot.com"]
+
+const allowSubdomainsFrom = [
+	...allowSubdomainsFromGwern,
+	".wikidata.org"
+]
+
 const whitelistDomains = [
 	...goodGwernDomains,
-	"wikidata.org"
 ]
