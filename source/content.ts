@@ -22,3 +22,24 @@ async function initPreviews() {
 }
 
 initPreviews()
+
+const watchAndInitNewLinks = () => {
+	const observer = new MutationObserver(mutations => {
+		mutations
+			.flatMap(mutations => Array.from(mutations.addedNodes))
+			.forEach(checkIfLinkAndInit)
+	})
+
+	observer.observe(document.body, {childList: true, subtree: true})
+}
+
+const checkIfLinkAndInit = node => {
+	const isLink = node instanceof HTMLAnchorElement || node instanceof HTMLAreaElement
+	if (isLink) {
+		initPreview(node)
+	} else if (node instanceof HTMLElement) {
+		node.querySelectorAll('a, area').forEach(initPreview)
+	}
+}
+
+watchAndInitNewLinks()
