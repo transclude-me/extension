@@ -31,4 +31,4 @@ function rewriteToMobile(link: string) {
 	return `https://${match[1]}.m.${match[2]}.org/wiki/${match[3]}`
 }
 
-const regex = /^https?:\/\/([\w]+)(?:\.m)?\.(wikipedia|wikibooks|wikiversity|wikivoyage|wikisource|wikiquote|wikinews|wikimedia)\.org\/wiki\/([^?#]+)/
+const regex = /^https?:\/\/([\w]+)(?:\.m)?\.(wikipedia|wikibooks|wikiversity|wikivoyage|wikisource|wikiquote|wikinews|wikimedia)\.org\/wiki\/(.+)/
