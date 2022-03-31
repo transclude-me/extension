@@ -6,6 +6,11 @@ async function initPreview(link: HTMLAnchorElement | HTMLAreaElement) {
 	const previewElement = await render(new URL(link.href))
 	if (!previewElement) return
 
+	// todo use render result for specific icon on the manner of
+	// https://www.gwern.net/Lorem#link-icons
+	// https://github.com/gwern/gwern.net/blob/master/css/links.css
+	link.classList.add("link-with-preview")
+
 	tippy(link, {
 		content: previewElement,
 		placement: "bottom",
