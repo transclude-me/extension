@@ -1,5 +1,6 @@
-import tippy from "tippy.js"
+import tippy, {Instance as Tippy} from "tippy.js"
 import {render} from "./rendering/link-renderer"
+import {isKeyDown} from "./common/keyboard"
 
 async function initPreview(link: HTMLAnchorElement | HTMLAreaElement) {
 	const previewElement = await render(new URL(link.href))
@@ -13,6 +14,10 @@ async function initPreview(link: HTMLAnchorElement | HTMLAreaElement) {
 		interactive: true,
 		theme: 'light',
 		maxWidth: '100%',
+		delay: [0, 400],
+		onShow(instance: Tippy) {
+			if (!isKeyDown('Alt')) return false
+		},
 	})
 }
 
