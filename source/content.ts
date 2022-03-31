@@ -31,8 +31,6 @@ async function initPreviews() {
 	//todo: this should have 2 modes: on-demand and render everything on load
 }
 
-initPreviews()
-
 const watchAndInitNewLinks = () => {
 	const observer = new MutationObserver(mutations => {
 		mutations
@@ -52,4 +50,13 @@ const checkIfLinkAndInit = node => {
 	}
 }
 
-watchAndInitNewLinks()
+function shouldRenderPreviews() {
+	// todo configurable and maybe per renderer
+	const blockList = ["gwern.net", "wikipedia.org", 'youtube.com']
+	return blockList.every(domain => !window.location.hostname.endsWith(domain))
+}
+
+if (shouldRenderPreviews()) {
+	initPreviews()
+	watchAndInitNewLinks()
+}

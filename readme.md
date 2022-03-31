@@ -1,6 +1,6 @@
 # Transclude Me Extension <img src="./source/resources/logo.svg" height="24" />
 
-Make web more context rich by enabling previews for a variety of links and embeds.
+Make web more context rich by enabling in-place context-specific previews for links.
 
 Supported link types:
 - [Text fragment links](https://web.dev/text-fragments/)
