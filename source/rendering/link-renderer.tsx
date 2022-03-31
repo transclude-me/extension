@@ -33,9 +33,7 @@ export const render = async (link: URL, renderers: LinkRenderer[] = allRenderers
 }
 
 const canRender = (link: URL, renderers: LinkRenderer[] = allRenderers): boolean =>
-	allRenderers.some(renderer => {
-		if (renderer.canRender(link)) return true
-	})
+	renderers.some(renderer => renderer.canRender(link))
 
 const buildReactComponent = (renderers: LinkRenderer[], link: URL) =>
 	renderers.find(r => r.canRender(link))?.render(link)
