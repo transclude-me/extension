@@ -15,10 +15,12 @@ async function initPreview(link: HTMLAnchorElement | HTMLAreaElement) {
 		content: previewElement,
 		placement: "bottom",
 		arrow: true,
+		// because otherwise popup may be hidden inside parents
+		appendTo: () => document.body,
 		animation: 'fade',
 		interactive: true,
 		theme: 'light',
-		maxWidth: '100%',
+		maxWidth: '55em',
 		delay: [0, 400],
 		onShow(instance: Tippy) {
 			if (!isKeyDown('Alt')) return false
