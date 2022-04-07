@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-unassigned-import
-import './options-storage.js'
+import './options/options-storage'
 
 import * as browser from 'webextension-polyfill'
 import {fetchText} from "./common/fetch"

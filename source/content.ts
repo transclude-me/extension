@@ -1,6 +1,7 @@
 import tippy, {Instance as Tippy} from "tippy.js"
 import {render} from "./rendering/link-renderer"
 import {isKeyDown} from "./common/keyboard"
+import {Options} from "./options/options-storage"
 
 async function initPreview(link: HTMLAnchorElement | HTMLAreaElement) {
 	const previewElement = await render(new URL(link.href))
@@ -52,13 +53,18 @@ const checkIfLinkAndInit = node => {
 	}
 }
 
-function shouldRenderPreviews() {
-	// todo configurable and maybe per renderer
-	const blockList = ["gwern.net", "wikipedia.org", 'youtube.com']
+const shouldRenderPreviews = async () => {
+	// todo maybe per renderer?
+	const blockList = await Options.renderBlocklist()
 	return blockList.every(domain => !window.location.hostname.endsWith(domain))
 }
 
-if (shouldRenderPreviews()) {
-	initPreviews()
-	watchAndInitNewLinks()
+
+const loadExtension = async () => {
+	if (await shouldRenderPreviews()) {
+		initPreviews()
+		watchAndInitNewLinks()
+	}
 }
+
+loadExtension()

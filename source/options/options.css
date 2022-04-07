@@ -1,0 +1,33 @@
+html {
+	overflow-x: hidden; /* Required to hide horizontal scroll on Firefox */
+}
+
+textarea, label {
+	width: 100%;
+	margin: 0;
+}
+
+:root {
+	--main-text-color: black;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--main-text-color: white;
+	}
+}
+
+.option-label {
+	margin-bottom: 0.5em;
+	font-weight: bold;
+}
+
+body {
+	color: var(--main-text-color);
+}
+
+.detail-view-container {
+	width: 100%;
+	display: flex;
+	padding: 0.5rem;
+}
