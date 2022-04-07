@@ -7,7 +7,7 @@ export class WikipediaRenderer implements LinkRenderer {
 	 * todo don't render wikipedia links on wikipedia, as they have native previews
 	 * also don't render things on gwern.net in general, which implies a more general pattern of "should render here"
 	 */
-	canRender(url: URL): boolean {
+	async canRender(url: URL): Promise<boolean> {
 		return regex.test(url.href)
 	}
 

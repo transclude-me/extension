@@ -4,7 +4,7 @@ import {ReactElement} from "react"
 import {getHighlightedPageElementsFromContentScript} from "../text-fragment"
 
 export class TextFragmentRenderer implements LinkRenderer {
-	canRender(url: URL): boolean {
+	async canRender(url: URL): Promise<boolean> {
 		return url.href.indexOf(":~:") !== -1
 	}
 

@@ -1,14 +1,21 @@
 import OptionsSync from 'webext-options-sync'
+import {allowSubdomainsFrom, whitelistDomains} from "./defaults/iframe"
+import * as browser from 'webextension-polyfill'
+
 
 const defaults = {
 	renderBlocklist: "gwern.net, wikipedia.org, youtube.com, roam.garden",
+	iframeDomainWhitelist: whitelistDomains.join(', '),
+	iframeSubdomainWhitelist: allowSubdomainsFrom.join(', '),
 }
+
 export const optionsStorage = new OptionsSync({
-	defaults: defaults,
+	defaults,
 	migrations: [
 		OptionsSync.migrations.removeUnused,
 	],
 	logging: true,
+	storage: browser.storage.local,
 })
 
 export const Options = {
@@ -16,8 +23,19 @@ export const Options = {
 		return await optionsStorage.getAll() as typeof defaults
 	},
 
-	async renderBlocklist() {
-		const all = await this.all()
-		return all.renderBlocklist.split(",").map(s => s.trim())
+	renderBlocklist: csvSetting('renderBlocklist'),
+
+	iframe: {
+		domainWhitelist: csvSetting('iframeDomainWhitelist'),
+		subdomainWhitelist: csvSetting('iframeSubdomainWhitelist'),
 	},
 }
+
+function csvSetting(name: string) {
+	return async () => {
+		const all = await Options.all()
+		return parseCsv(all[name])
+	}
+}
+
+const parseCsv = (csv: string) => csv.split(",").map(s => s.trim())
