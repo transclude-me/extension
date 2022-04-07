@@ -877,9 +877,11 @@ const allowSubdomainsFromGwern =
 
 const allowSubdomainsFrom = [
 	...allowSubdomainsFromGwern,
-	".wikidata.org"
+	".wikidata.org",
+	".roam.garden",
 ]
 
 const whitelistDomains = [
 	...goodGwernDomains,
+	"manifold.markets",
 ]
