@@ -44,12 +44,13 @@ const watchAndInitNewLinks = () => {
 	observer.observe(document.body, {childList: true, subtree: true})
 }
 
-const checkIfLinkAndInit = node => {
+const checkIfLinkAndInit = (node: Node) => {
 	const isLink = node instanceof HTMLAnchorElement || node instanceof HTMLAreaElement
 	if (isLink) {
 		initPreview(node)
 	} else if (node instanceof HTMLElement) {
-		node.querySelectorAll('a, area').forEach(initPreview)
+		const links = node.querySelectorAll('a, area') as NodeListOf<HTMLAnchorElement | HTMLAreaElement>
+		links.forEach(initPreview)
 	}
 }
 

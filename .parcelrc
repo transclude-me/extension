@@ -1,5 +1,8 @@
 {
-	"extends": "@parcel/config-webextension",
-	"validators": {
-     }
+  "extends": "@parcel/config-webextension",
+  "validators": {
+	"*.{ts,tsx}": [
+	  "@parcel/validator-typescript"
+	]
+  }
 }

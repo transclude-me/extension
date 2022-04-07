@@ -5,7 +5,7 @@ interface RawElementAdapterProps {
 }
 
 export function RawElementAdapter({elements, ...restProps}: RawElementAdapterProps) {
-	const ref = useRef(null)
+	const ref = useRef<HTMLDivElement>(null)
 	useEffect(() => {
 		ref?.current?.append(...elements)
 	})

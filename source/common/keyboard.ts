@@ -1,5 +1,5 @@
 export const isKeyDown = (() => {
-	const state = {}
+	const state: { [key: string]: boolean } = {}
 
 	window.addEventListener('keyup', (e) => state[e.key] = false)
 	window.addEventListener('keydown', (e) => state[e.key] = true)

@@ -30,7 +30,7 @@ const firstHeaderSuffix = (finalComponent: string) =>
 	finalComponent.includes("#") ? "" : "#firstHeading"
 
 function rewriteToMobile(link: string) {
-	const match = link.match(regex)
+	const match = link.match(regex)!
 	const alreadyMobile = match.length > 4
 	if (alreadyMobile) return link
 

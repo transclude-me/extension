@@ -1,7 +1,7 @@
 import {
 	getFragmentDirectives,
 	parseFragmentDirectives,
-	processFragmentDirectives,
+	processFragmentDirectives, // @ts-ignore no type definitions available
 } from 'text-fragments-polyfill/src/text-fragment-utils'
 import * as browser from "webextension-polyfill"
 import {fetchText} from "./common/fetch"
@@ -25,10 +25,10 @@ export async function getHighlightedPageElements(href: string): Promise<Array<st
 	const doc = await loadDocument(url)
 
 	const elements: Array<Node[]> = processFragmentDirectives(directives, doc).text
-	return elements.map(e => getCommonAncestor(e).outerHTML)
+	return elements.map(e => getCommonAncestor(e)!.outerHTML)
 }
 
-const getCommonAncestor = (nodes: Node[]): HTMLElement => {
+const getCommonAncestor = (nodes: Node[]): HTMLElement | null => {
 	if (nodes.length === 1) {
 		return nodes[0].parentElement
 	}

@@ -31,7 +31,9 @@ export const Options = {
 	},
 }
 
-function csvSetting(name: string) {
+type SettingNames = keyof typeof defaults
+
+function csvSetting(name: SettingNames) {
 	return async () => {
 		const all = await Options.all()
 		return parseCsv(all[name])

@@ -38,7 +38,9 @@ const canRender = async (link: URL, renderers: LinkRenderer[] = allRenderers): P
 
 const buildReactComponent = async(renderers: LinkRenderer[], link: URL) => {
 	const renderer = await findAsync(renderers, r => r.canRender(link))
-	return renderer?.render(link)
+	if (!renderer) throw new Error("No matching renderer found")
+
+	return renderer.render(link)
 }
 
 function defaultRenderContainer() {
