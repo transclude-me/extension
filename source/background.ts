@@ -14,3 +14,5 @@ browser.runtime.onMessage.addListener(async (message: any, sender: any) => {
 		return getHighlightedPageElements(message.url)
 	}
 })
+
+browser.browserAction.onClicked.addListener(async (tab: any) => browser.runtime.openOptionsPage())
