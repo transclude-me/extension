@@ -1,6 +1,5 @@
 import OptionsSync from 'webext-options-sync'
 import {allowSubdomainsFrom, whitelistDomains} from "./defaults/iframe"
-import * as browser from 'webextension-polyfill'
 
 
 const defaults = {
@@ -15,7 +14,7 @@ export const optionsStorage = new OptionsSync({
 		OptionsSync.migrations.removeUnused,
 	],
 	logging: true,
-	storage: browser.storage.local,
+	storageType: 'local',
 })
 
 export const Options = {
@@ -31,9 +30,9 @@ export const Options = {
 	},
 }
 
-type SettingNames = keyof typeof defaults
+type SettingName = keyof typeof defaults
 
-function csvSetting(name: SettingNames) {
+function csvSetting(name: SettingName) {
 	return async () => {
 		const all = await Options.all()
 		return parseCsv(all[name])
