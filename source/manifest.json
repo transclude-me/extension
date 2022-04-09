@@ -12,10 +12,12 @@
 		}
 	},
 	"icons": {
-		"128": "resources/logo.svg"
+		"48": "resources/logo-48.png",
+		"96": "resources/logo-96.png",
+		"128": "resources/logo-128.png"
 	},
 	"browser_action": {
-	    "default_icon": "resources/logo.svg",
+	    "default_icon": "resources/logo-128.png",
 	    "default_title": "Transclude Me"
 	},
 	"permissions": [
