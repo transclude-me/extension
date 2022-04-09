@@ -25,8 +25,8 @@
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
-			"js": [ "content.ts" ],
-		    "css": [ "content-imports.css" ],
+			"js": [ "content/index.ts" ],
+		    "css": [ "content/index.css" ],
 			"run_at": "document_end"
 		}
  	],

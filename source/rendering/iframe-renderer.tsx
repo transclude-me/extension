@@ -1,6 +1,5 @@
 import {LinkRenderer} from "./link-renderer"
 import {ReactElement} from "react"
-import {css} from "@emotion/react"
 import {Options} from "../options/options-storage"
 
 export class IframeRenderer implements LinkRenderer {
@@ -16,11 +15,8 @@ export class IframeRenderer implements LinkRenderer {
 		// todo right now the iframe is not preserved on consecutive views?
 		// I think that can be tippy's problem though
 		return <iframe
+			className={'iframe-preview'}
 			src={url.href}
-			css={css`
-			  width: 600px;
-			  height: 500px;
-			`}
 		/>
 	}
 }

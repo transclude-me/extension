@@ -1,6 +1,3 @@
-@import 'npm:tippy.js/dist/tippy.css';
-@import 'npm:tippy.js/themes/light.css';
-
 .link-with-preview::after {
 	text-decoration: none;
 	content: 'τ';

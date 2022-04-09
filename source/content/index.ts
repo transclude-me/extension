@@ -1,7 +1,11 @@
 import tippy, {Instance as Tippy} from "tippy.js"
-import {render} from "./rendering/link-renderer"
-import {isKeyDown} from "./common/keyboard"
-import {Options} from "./options/options-storage"
+import {render} from "../rendering/link-renderer"
+import {isKeyDown} from "../common/keyboard"
+import {Options} from "../options/options-storage"
+// @ts-ignore parcel
+import shadowCss from "bundle-text:./shadow.css"
+
+const shadowRoot = initShadowRoot()
 
 async function initPreview(link: HTMLAnchorElement | HTMLAreaElement) {
 	const previewElement = await render(new URL(link.href))
@@ -16,8 +20,8 @@ async function initPreview(link: HTMLAnchorElement | HTMLAreaElement) {
 		content: previewElement,
 		placement: "bottom",
 		arrow: true,
-		// because otherwise popup may be hidden inside parents
-		appendTo: () => document.body,
+		// in shadow dom to avoid affecting the page styles
+		appendTo: () => shadowRoot as unknown as Element,
 		animation: 'fade',
 		interactive: true,
 		theme: 'light',
@@ -60,7 +64,6 @@ const shouldRenderPreviews = async () => {
 	return blockList.every(domain => !window.location.hostname.endsWith(domain))
 }
 
-
 const loadExtension = async () => {
 	if (await shouldRenderPreviews()) {
 		initPreviews()
@@ -68,4 +71,19 @@ const loadExtension = async () => {
 	}
 }
 
+
 loadExtension()
+
+function initShadowRoot() {
+	const shadowContainer = document.createElement("div")
+	shadowContainer.className = "transclude-shadow-container"
+
+	const shadowRoot = shadowContainer.attachShadow({mode: "open"})
+	let style = document.createElement('style')
+	style.innerText = shadowCss
+
+	shadowRoot.appendChild(style)
+	document.body.appendChild(shadowContainer)
+
+	return shadowRoot
+}

@@ -11,7 +11,7 @@ export class TextFragmentRenderer implements LinkRenderer {
 	async render(url: URL): Promise<ReactElement> {
 		const elementsByFragment = await getHighlightedPageElementsFromContentScript(url.href)
 
-		return <div>
+		return <div className={"text-fragment-preview"}>
 			{elementsByFragment.map(elements =>
 				<div dangerouslySetInnerHTML={{__html: elements}}/>,
 			)}
