@@ -1,5 +1,4 @@
 import {LinkRenderer} from "./link-renderer"
-import {css} from "@emotion/react"
 import {ReactElement} from "react"
 
 export class WikipediaRenderer implements LinkRenderer {
@@ -13,13 +12,9 @@ export class WikipediaRenderer implements LinkRenderer {
 
 	async render(url: URL): Promise<ReactElement> {
 		return <iframe
+			className={'wikipedia-preview'}
 			src={rewriteToMobile(url.href)}
-			css={css`
-			  width: 600px;
-			  height: 500px;
-			`}
 		/>
-
 	}
 }
 

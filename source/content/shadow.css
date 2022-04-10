@@ -1,7 +1,8 @@
 @import 'npm:tippy.js/dist/tippy.css';
 @import 'npm:tippy.js/themes/light.css';
 
-.iframe-preview {
+.iframe-preview,
+.wikipedia-preview {
 	width: 600px;
 	height: 500px;
 	border: none;
