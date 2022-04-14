@@ -1,10 +1,10 @@
-import {ReactElement} from "react"
-import * as ReactDOM from "react-dom"
+import {ReactElement} from 'react'
+import * as ReactDOM from 'react-dom'
 
-import {TextFragmentRenderer} from "./text-fragment-renderer"
-import {IframeRenderer} from "./iframe-renderer"
-import {WikipediaRenderer} from "./wikipedia-renderer"
-import {findAsync, someAsync} from "../common/async"
+import {TextFragmentRenderer} from './text-fragment-renderer'
+import {IframeRenderer} from './iframe-renderer'
+import {WikipediaRenderer} from './wikipedia-renderer'
+import {findAsync, someAsync} from '../common/async'
 
 export interface LinkRenderer {
 	canRender(url: URL): Promise<boolean>
@@ -36,9 +36,9 @@ export const render = async (link: URL, renderers: LinkRenderer[] = allRenderers
 const canRender = async (link: URL, renderers: LinkRenderer[] = allRenderers): Promise<boolean> =>
 	someAsync(renderers, renderer => renderer.canRender(link))
 
-const buildReactComponent = async(renderers: LinkRenderer[], link: URL) => {
+const buildReactComponent = async (renderers: LinkRenderer[], link: URL) => {
 	const renderer = await findAsync(renderers, r => r.canRender(link))
-	if (!renderer) throw new Error("No matching renderer found")
+	if (!renderer) throw new Error('No matching renderer found')
 
 	return renderer.render(link)
 }

@@ -1,9 +1,9 @@
-import tippy, {Instance as Tippy} from "tippy.js"
-import {render} from "../rendering/link-renderer"
-import {isKeyDown} from "../common/keyboard"
-import {Options} from "../options/options-storage"
+import tippy from 'tippy.js'
+import {Options} from '../options/options-storage'
 // @ts-ignore parcel
-import shadowCss from "bundle-text:./shadow.css"
+import shadowCss from 'bundle-text:./shadow.css'
+import {isKeyDown} from '../common/keyboard'
+import {render} from '../rendering/link-renderer'
 
 const shadowRoot = initShadowRoot()
 
@@ -14,11 +14,11 @@ async function initPreview(link: HTMLAnchorElement | HTMLAreaElement) {
 	// todo use render result for specific icon on the manner of
 	// https://www.gwern.net/Lorem#link-icons
 	// https://github.com/gwern/gwern.net/blob/master/css/links.css
-	link.classList.add("link-with-preview")
+	link.classList.add('link-with-preview')
 
 	tippy(link, {
 		content: previewElement,
-		placement: "bottom",
+		placement: 'bottom',
 		arrow: true,
 		// in shadow dom to avoid affecting the page styles
 		appendTo: () => shadowRoot as unknown as Element,
@@ -27,7 +27,7 @@ async function initPreview(link: HTMLAnchorElement | HTMLAreaElement) {
 		theme: 'light',
 		maxWidth: '55em',
 		delay: [0, 400],
-		onShow(instance: Tippy) {
+		onShow() {
 			if (!isKeyDown('Alt')) return false
 		},
 	})
@@ -35,7 +35,7 @@ async function initPreview(link: HTMLAnchorElement | HTMLAreaElement) {
 
 async function initPreviews() {
 	Array.from(document.links).forEach(initPreview)
-	//todo: this should have 2 modes: on-demand and render everything on load
+	// todo: this should have 2 modes: on-demand and render everything on load
 }
 
 const watchAndInitNewLinks = () => {
@@ -51,7 +51,7 @@ const watchAndInitNewLinks = () => {
 const checkIfLinkAndInit = (node: Node) => {
 	const isLink = node instanceof HTMLAnchorElement || node instanceof HTMLAreaElement
 	if (isLink) {
-		initPreview(node)
+		void initPreview(node)
 	} else if (node instanceof HTMLElement) {
 		const links = node.querySelectorAll('a, area') as NodeListOf<HTMLAnchorElement | HTMLAreaElement>
 		links.forEach(initPreview)
@@ -64,26 +64,25 @@ const shouldRenderPreviews = async () => {
 	return blockList.every(domain => !window.location.hostname.endsWith(domain))
 }
 
+function initShadowRoot() {
+	const shadowContainer = document.createElement('div')
+	shadowContainer.className = 'transclude-shadow-container'
+
+	const shadowRoot = shadowContainer.attachShadow({mode: 'open'})
+	const style = document.createElement('style')
+	style.innerText = shadowCss
+
+	shadowRoot.append(style)
+	document.body.append(shadowContainer)
+
+	return shadowRoot
+}
+
 const loadExtension = async () => {
 	if (await shouldRenderPreviews()) {
-		initPreviews()
+		void initPreviews()
 		watchAndInitNewLinks()
 	}
 }
 
-
-loadExtension()
-
-function initShadowRoot() {
-	const shadowContainer = document.createElement("div")
-	shadowContainer.className = "transclude-shadow-container"
-
-	const shadowRoot = shadowContainer.attachShadow({mode: "open"})
-	let style = document.createElement('style')
-	style.innerText = shadowCss
-
-	shadowRoot.appendChild(style)
-	document.body.appendChild(shadowContainer)
-
-	return shadowRoot
-}
+void loadExtension()

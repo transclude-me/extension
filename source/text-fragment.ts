@@ -3,8 +3,8 @@ import {
 	parseFragmentDirectives,
 	processFragmentDirectives, // @ts-ignore no type definitions available
 } from 'text-fragments-polyfill/src/text-fragment-utils'
-import * as browser from "webextension-polyfill"
-import {fetchText} from "./common/fetch"
+import * as browser from 'webextension-polyfill'
+import {fetchText} from './common/fetch'
 
 export const getHighlightedPageElementsFromContentScript = async (url: string): Promise<Array<string>> =>
 	browser.runtime.sendMessage({

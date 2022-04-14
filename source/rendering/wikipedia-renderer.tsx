@@ -1,5 +1,5 @@
-import {LinkRenderer} from "./link-renderer"
-import {ReactElement} from "react"
+import {LinkRenderer} from './link-renderer'
+import {ReactElement} from 'react'
 
 export class WikipediaRenderer implements LinkRenderer {
 	/**
@@ -22,7 +22,7 @@ export class WikipediaRenderer implements LinkRenderer {
  * If there is no hash in the url - scroll to the first header to display more relevant content
  */
 const firstHeaderSuffix = (finalComponent: string) =>
-	finalComponent.includes("#") ? "" : "#firstHeading"
+	finalComponent.includes('#') ? '' : '#firstHeading'
 
 function rewriteToMobile(link: string) {
 	const match = link.match(regex)!
