@@ -25,7 +25,40 @@ export async function getHighlightedPageElements(href: string): Promise<Array<st
 	const doc = await loadDocument(url)
 
 	const elements: Array<Node[]> = processFragmentDirectives(directives, doc).text
-	return elements.map(e => getCommonAncestor(e)!.outerHTML)
+	return elements.map(e => {
+		const ancestor = getCommonAncestor(e)!
+		inlineStyle(ancestor)
+		// todo inlineStyleRecursively(ancestor)
+
+		return ancestor.outerHTML
+	})
+}
+
+function inlineStyleRecursively(element: HTMLElement) {
+	inlineStyle(element)
+	for (const child of element.children) {
+		inlineStyleRecursively(child as HTMLElement)
+	}
+}
+
+function inlineStyle(element: HTMLElement) {
+	/*
+	 todo this is better then nothing,
+	 but does not actually compute all the styles for the doc downloaded in background
+	 part of it, I think is that files are not downloaded when we just parse the doc,
+	 can test it with a local file probs
+	 and maybe manually inline css
+
+	 todo also this does not handle :before/:after
+	*/
+	const computedStyle = getComputedStyle(element)
+	for (let i = 0; i < computedStyle.length; i++) {
+		const name = computedStyle[i]
+		element.style.setProperty(name,
+			computedStyle.getPropertyValue(name),
+			computedStyle.getPropertyPriority(name),
+		)
+	}
 }
 
 const getCommonAncestor = (nodes: Node[]): HTMLElement | null => {
