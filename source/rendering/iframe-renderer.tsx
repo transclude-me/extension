@@ -1,13 +1,13 @@
-import {LinkRenderer} from "./link-renderer"
-import {ReactElement} from "react"
-import {Options} from "../options/options-storage"
+import {ReactElement} from 'react'
+import {Options} from '../options/options-storage'
+import {LinkRenderer} from './link-renderer'
 
 export class IframeRenderer implements LinkRenderer {
 	async canRender(url: URL): Promise<boolean> {
 		const domainWhitelist = await Options.iframe.domainWhitelist()
 		const subdomainWhitelist = await Options.iframe.subdomainWhitelist()
 
-		return domainWhitelist.some(domain => url.hostname.indexOf(domain) !== -1) ||
+		return domainWhitelist.some(domain => url.hostname.includes(domain)) ||
 			subdomainWhitelist.some(domain => url.hostname.endsWith(domain))
 	}
 

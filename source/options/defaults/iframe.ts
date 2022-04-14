@@ -1,5 +1,6 @@
 // stolen from https://github.com/gwern/gwern.net/blob/1bb7737e59eba4ff1579b7fb2d7ad2e2402ce847/build/LinkLive.hs
-// todo maintain in sync?
+// Todo maintain in sync?
+/* eslint-disable comma-style, @typescript-eslint/quotes */
 const goodGwernDomains = [
 	"1dollarscan.com"
 	, "80000hours.org"
@@ -844,15 +845,32 @@ const goodGwernDomains = [
 	, "www.unf.edu",
 ]
 
-const allowSubdomainsFromGwern =
-	[".allennlp.org", ".archive.org", ".archiveteam.org", ".bandcamp.com", ".eleuther.ai", ".fandom.com",
-		".github.io", ".givewell.org", ".greenspun.com", ".humanprogress.org", ".imagemagick.org", ".mementoweb.org",
-		".metafilter.com", ".nomeata.de", ".obormot.net", ".tumblr.com", ".xkcd.com", ".wikipedia.org", ".wordpress.com",
-		".blogspot.com"]
+const allowSubdomainsFromGwern = [
+	'.allennlp.org',
+	'.archive.org',
+	'.archiveteam.org',
+	'.bandcamp.com',
+	'.eleuther.ai',
+	'.fandom.com',
+	'.github.io',
+	'.givewell.org',
+	'.greenspun.com',
+	'.humanprogress.org',
+	'.imagemagick.org',
+	'.mementoweb.org',
+	'.metafilter.com',
+	'.nomeata.de',
+	'.obormot.net',
+	'.tumblr.com',
+	'.xkcd.com',
+	'.wikipedia.org',
+	'.wordpress.com',
+	'.blogspot.com',
+]
 
 export const allowSubdomainsFrom = [
-	".wikidata.org",
-	".roam.garden",
+	'.wikidata.org',
+	'.roam.garden',
 	...allowSubdomainsFromGwern,
 ]
 

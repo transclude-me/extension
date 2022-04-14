@@ -1,4 +1,5 @@
-textarea, label {
+textarea,
+label {
 	width: 100%;
 	margin: 0;
 }
