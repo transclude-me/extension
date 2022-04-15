@@ -26,7 +26,7 @@ export async function getHighlightedPageElements(href: string): Promise<Array<st
 
 	const doc = await loadDocument(url)
 
-	const styleNodes = await getStyleNodes(doc, url)
+	const styleNodes = await getStyleNodes(doc)
 
 	const highlightedElements: Array<Node[]> = processFragmentDirectives(directives, doc).text
 	return highlightedElements.map(e => {
@@ -61,8 +61,24 @@ const getCommonAncestor = (nodes: Node[]): HTMLElement | null => {
 	return findFirstCommonAncestor(nodes[0], nodes[nodes.length - 1]) as HTMLElement
 }
 
-const loadDocument = async (url: URL) =>
-	new DOMParser().parseFromString(await fetchText(url.href), 'text/html')
+const loadDocument = async (url: URL) => {
+	const doc = new DOMParser().parseFromString(await fetchText(url.href), 'text/html')
+	injectBase(doc, url)
+	return doc
+}
+
+/**
+ * This is required so the relative links in the document are resolved correctly
+ * see https://stackoverflow.com/questions/71880428/create-a-new-document-object-with-custom-url
+ */
+function injectBase(doc: Document, url: URL) {
+	let base = doc.querySelector('base')
+	if (!base) {
+		base = doc.createElement('base')
+		doc.head.append(base)
+	}
+	base.href = url.href
+}
 
 const findFirstCommonAncestor = (nodeA: Node, nodeB: Node): Node => {
 	let range = new Range()
