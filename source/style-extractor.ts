@@ -1,33 +1,21 @@
 import {fetchText} from './common/fetch'
 import {mapAsync} from './common/async'
 
-export async function getStyleNodes(doc: Document, baseUrl: URL) {
+export async function getStyleNodes(doc: Document) {
 	const existingNodes = doc.querySelectorAll('style')
-	const nodesFromLinks = await getStyleNodesFromLinks(doc, baseUrl)
+	const nodesFromLinks = await getStyleNodesFromLinks(doc)
 
 	return [...existingNodes, ...nodesFromLinks].map(adoptStyle)
 }
 
-const getStyleNodesFromLinks = async (doc: Document, baseUrl: URL): Promise<HTMLStyleElement[]> =>
-	mapAsync(
-		getStyleLinks(doc, baseUrl),
-		async (link) => newStyleNode(doc, await fetchText(link.href)))
+const getStyleNodesFromLinks = async (doc: Document): Promise<HTMLStyleElement[]> =>
+	mapAsync(getStyleLinks(doc),
+		async (link) => newStyleNode(doc, await fetchText(link)))
 
-function getStyleLinks(doc: Document, baseUrl: URL) {
+function getStyleLinks(doc: Document) {
 	const stylesheets = doc.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')
 
-	return [...stylesheets].filter(element => element.href).map(getUrlWithOriginalBase)
-
-	/**
-	 * By default, links will get the URL of the extension page =\
-	 * Need to override them back to original URL
-	 */
-	function getUrlWithOriginalBase(element: HTMLLinkElement) {
-		const url = new URL(element.href)
-		url.host = baseUrl.host
-		url.protocol = baseUrl.protocol
-		return url
-	}
+	return [...stylesheets].map(it => it.href).filter(Boolean)
 }
 
 function newStyleNode(doc: Document, style: string) {
