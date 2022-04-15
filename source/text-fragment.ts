@@ -1,10 +1,12 @@
 import {
 	getFragmentDirectives,
 	parseFragmentDirectives,
-	processFragmentDirectives, // @ts-ignore no type definitions available
+	processFragmentDirectives,
+	// @ts-ignore no type definitions available
 } from 'text-fragments-polyfill/src/text-fragment-utils'
 import * as browser from 'webextension-polyfill'
 import {fetchText} from './common/fetch'
+import {getStyleNodes} from './style-extractor'
 
 export const getHighlightedPageElementsFromContentScript = async (url: string): Promise<Array<string>> =>
 	browser.runtime.sendMessage({
@@ -15,50 +17,40 @@ export const getHighlightedPageElementsFromContentScript = async (url: string): 
 /**
  * Todo:
  * caching
+ * minimize CSS
  * for headers - probably want to include the following paragraph
  */
-
 export async function getHighlightedPageElements(href: string): Promise<Array<string>> {
 	const url = new URL(href)
 	const directives = parseFragmentDirectives(getFragmentDirectives(url.hash))
 
 	const doc = await loadDocument(url)
 
-	const elements: Array<Node[]> = processFragmentDirectives(directives, doc).text
-	return elements.map(e => {
-		const ancestor = getCommonAncestor(e)!
-		inlineStyle(ancestor)
-		// todo inlineStyleRecursively(ancestor)
+	const styleNodes = await getStyleNodes(doc, url)
 
+	const highlightedElements: Array<Node[]> = processFragmentDirectives(directives, doc).text
+	return highlightedElements.map(e => {
+		const ancestor = getBestAncestor(getCommonAncestor(e)!)
+		ancestor.append(...styleNodes)
 		return ancestor.outerHTML
 	})
 }
 
-function inlineStyleRecursively(element: HTMLElement) {
-	inlineStyle(element)
-	for (const child of element.children) {
-		inlineStyleRecursively(child as HTMLElement)
+/**
+ * Best guess element to extract for the fragment
+ *
+ * Current heuristic:
+ * walk up the tree while we are the single child of a parent
+ * The justification is that the structure can be important for
+ * styling/proper rendering of the fragment
+ */
+function getBestAncestor(element: HTMLElement) {
+	let parent = element.parentElement
+	while (parent && parent.childElementCount === 1) {
+		element = parent
+		parent = element.parentElement
 	}
-}
-
-function inlineStyle(element: HTMLElement) {
-	/*
-	 todo this is better then nothing,
-	 but does not actually compute all the styles for the doc downloaded in background
-	 part of it, I think is that files are not downloaded when we just parse the doc,
-	 can test it with a local file probs
-	 and maybe manually inline css
-
-	 todo also this does not handle :before/:after
-	*/
-	const computedStyle = getComputedStyle(element)
-	for (let i = 0; i < computedStyle.length; i++) {
-		const name = computedStyle[i]
-		element.style.setProperty(name,
-			computedStyle.getPropertyValue(name),
-			computedStyle.getPropertyPriority(name),
-		)
-	}
+	return element
 }
 
 const getCommonAncestor = (nodes: Node[]): HTMLElement | null => {

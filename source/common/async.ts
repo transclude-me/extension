@@ -21,3 +21,8 @@ export const findAsync = async <T>(arr: Array<T>, asyncCallback: (item: T) => Pr
 	const index = await findIndexAsync(mapped, result => result)
 	return arr[index]
 }
+
+export const mapAsync = async <T, R>(arr: Array<T>, asyncCallback: (item: T) => Promise<R>): Promise<R[]> => {
+	const mapped = arr.map(asyncCallback)
+	return Promise.all(mapped)
+}
