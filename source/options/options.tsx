@@ -8,7 +8,7 @@ const Options = () =>
 		<form id={formId} className={'detail-view-container'}>
 			<section>
 				<label className={'option-input'}>
-					<div className={'option-label'}> Don't render previews on:</div>
+					<div className={'option-label'}> Don&apos;t render previews on:</div>
 					<textarea name="renderBlocklist" rows={5}/>
 				</label>
 			</section>
@@ -25,7 +25,6 @@ const Options = () =>
 						<div className={'option-label'}>Render iframe preview for links on subdomains:</div>
 						<textarea name="iframeSubdomainWhitelist" rows={5}/>
 					</label>
-
 				</div>
 			</section>
 		</form>

@@ -50,6 +50,7 @@ function getBestAncestor(element: HTMLElement) {
 		element = parent
 		parent = element.parentElement
 	}
+
 	return element
 }
 
@@ -75,13 +76,15 @@ function injectBase(doc: Document, url: URL) {
 	let base = doc.querySelector('base')
 	if (!base) {
 		base = doc.createElement('base')
-		doc.head.append(base)
+		doc.head.prepend(base)
 	}
+
 	base.href = url.href
+	base.target = '_blank'
 }
 
 const findFirstCommonAncestor = (nodeA: Node, nodeB: Node): Node => {
-	let range = new Range()
+	const range = new Range()
 	range.setStartBefore(nodeA)
 	range.setEndAfter(nodeB)
 	// There's a compilication, if nodeA is positioned after
@@ -94,5 +97,6 @@ const findFirstCommonAncestor = (nodeA: Node, nodeB: Node): Node => {
 		range.setStartBefore(nodeB)
 		range.setEndAfter(nodeA)
 	}
+
 	return range.commonAncestorContainer
 }

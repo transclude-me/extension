@@ -27,7 +27,7 @@ export const render = async (link: URL, renderers: LinkRenderer[] = allRenderers
 
 	const renderContainer = defaultRenderContainer()
 	buildReactComponent(renderers, link)?.then(component => {
-		//todo common loading indicator
+		// todo common loading indicator
 		ReactDOM.render(component, renderContainer)
 	})
 	return renderContainer

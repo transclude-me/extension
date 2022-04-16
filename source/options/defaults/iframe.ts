@@ -1,6 +1,6 @@
 // stolen from https://github.com/gwern/gwern.net/blob/1bb7737e59eba4ff1579b7fb2d7ad2e2402ce847/build/LinkLive.hs
 // Todo maintain in sync?
-/* eslint-disable comma-style, @typescript-eslint/quotes */
+/* eslint-disable comma-style, @typescript-eslint/quotes, quotes */
 const goodGwernDomains = [
 	"1dollarscan.com"
 	, "80000hours.org"
