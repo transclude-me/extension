@@ -1,0 +1,62 @@
+---
+env:
+  browser: true
+  webextensions: true
+  es6: true
+plugins:
+  - '@typescript-eslint'
+  - 'react'
+  - 'react-hooks'
+extends:
+  - xo
+  - xo/browser
+  #  - xo-react
+  - plugin:react-hooks/recommended
+  - plugin:react/recommended
+rules:
+  quotes:
+    - 'warn'
+    - 'single'
+    - avoidEscape: true
+      allowTemplateLiterals: true
+  semi:
+    - error
+    - never
+    - beforeStatementContinuationChars: "always"
+  indent:
+    - error
+    - tab
+    - SwitchCase: 1
+  react/react-in-jsx-scope: off
+  no-void: off
+  no-unused-vars: off
+  "operator-linebreak": [
+    "error",
+    "after"
+  ]
+  "@typescript-eslint/member-delimiter-style": [
+    "error",
+    {
+      "multiline": {
+        "delimiter": "none"
+      }
+    }
+  ]
+  "unicorn/prefer-query-selector": "off"
+  "unicorn/no-array-callback-reference": "off"
+  "capitalized-comments": "off"
+  "unicorn/no-array-for-each": "off"
+  no-await-in-loop: off
+  curly:
+    - error
+    - multi-line
+  no-prototype-builtins: off
+  no-undef: off
+
+parser: '@typescript-eslint/parser'
+parserOptions:
+  ecmaVersion: 2020
+  sourceType: module
+  ecmaFeatures:
+    jsx: true
+

@@ -10,7 +10,7 @@ export async function getStyleNodes(doc: Document) {
 
 const getStyleNodesFromLinks = async (doc: Document): Promise<HTMLStyleElement[]> =>
 	mapAsync(getStyleLinks(doc),
-		async (link) => newStyleNode(doc, await fetchText(link)))
+		async link => newStyleNode(doc, await fetchText(link)))
 
 function getStyleLinks(doc: Document) {
 	const stylesheets = doc.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')
