@@ -3,13 +3,15 @@ import {isKeyDown} from '../common/keyboard'
 
 // @ts-ignore parcel
 import shadowCss from 'bundle-text:../content/shadow.css'
+import {IntroShownCount} from './introduction-counter'
 
 const shadowRoot = initShadowRoot()
+const keyName = 'Alt'
 
 export function showTippy(link: HTMLAnchorElement | HTMLAreaElement, previewElement: HTMLElement) {
 	tippy(link, {
 		content: previewElement,
-		plugins: [buttonPressPlugin('Alt')],
+		plugins: [buttonPressPlugin(keyName)],
 		placement: 'bottom',
 		arrow: true,
 		// in shadow dom to avoid affecting the page styles
@@ -23,6 +25,22 @@ export function showTippy(link: HTMLAnchorElement | HTMLAreaElement, previewElem
 			// Intentionally empty - monkey patched in the plugin: https://github.com/atomiks/tippyjs/issues/644
 		},
 	})
+	void showOnboardingTooltip(link)
+}
+
+/**
+ * Only show first ~few times the user is hovering over things
+ */
+async function showOnboardingTooltip(link: HTMLAnchorElement | HTMLAreaElement) {
+	if (!await IntroShownCount.isOverLimit()) {
+		tippy(link, {
+			content: 'Press "Alt" key while hovering over the link to see the preview',
+			appendTo: () => shadowRoot as unknown as Element,
+			onShow() {
+				IntroShownCount.increment()
+			},
+		})
+	}
 }
 
 /*
@@ -44,7 +62,7 @@ const buttonPressPlugin = (keyName: string) => ({
 				return
 			}
 
-			if (!isKeyDown('Alt')) return false
+			if (!isKeyDown(keyName)) return false
 		}
 
 		const keyDownHandler = (e: KeyboardEvent) => {
