@@ -1,11 +1,11 @@
 {
 	"name": "Transclude Me",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Make web more context rich by enabling in-place context-specific previews for links",
 	"homepage_url": "https://github.com/transclude-me/extension",
 	"manifest_version": 2,
 	"minimum_chrome_version": "74",
-	"applications": {
+	"browser_specific_settings": {
 		"gecko": {
 			"id": "transclude-me@stvad",
 			"strict_min_version": "67.0"
@@ -33,7 +33,7 @@
 		}
  	],
 	"options_ui": {
-		"chrome_style": true,
+		"browser_style": true,
 		"page": "options/options.html"
 	},
 	"background": {
