@@ -1,11 +1,13 @@
 import {fetchText} from './common/fetch'
 import {mapAsync} from './common/async'
 
+const fetchedFromStyleAttribute = 'fetched-from-link'
+
 export async function getStyleNodes(doc: Document) {
 	const existingNodes = doc.querySelectorAll('style')
 	const nodesFromLinks = await getStyleNodesFromLinks(doc)
 
-	return [...existingNodes, ...nodesFromLinks].map(adoptStyle)
+	return [...existingNodes, ...nodesFromLinks, newStyleNode(doc, '.a>.b{color:yellow;}')].map(adoptStyle)
 }
 
 const getStyleNodesFromLinks = async (doc: Document): Promise<HTMLStyleElement[]> =>
@@ -20,6 +22,7 @@ function getStyleLinks(doc: Document) {
 
 function newStyleNode(doc: Document, style: string) {
 	const styleNode = doc.createElement('style')
+	styleNode.setAttribute(fetchedFromStyleAttribute, 'true')
 	styleNode.textContent = style
 	return styleNode
 }

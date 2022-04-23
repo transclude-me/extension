@@ -1,6 +1,9 @@
 import {Options} from '../options/options-storage'
 import {render} from '../rendering/link-renderer'
 import {showTippy} from '../utils/tippy'
+import {setupEventHandlers} from './copy-fragment'
+
+setupEventHandlers()
 
 const linkSelector = 'a, area'
 const linkPreviewClass = 'link-with-preview'

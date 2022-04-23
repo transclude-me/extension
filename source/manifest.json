@@ -22,7 +22,9 @@
 	},
 	"permissions": [
        "<all_urls>",
-		"storage"
+		"storage",
+		"contextMenus",
+	    "clipboardWrite"
 	],
 	"content_scripts": [
 		{
