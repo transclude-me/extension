@@ -10,7 +10,8 @@ const docStyleNodes = lazy(async () => {
 	return nodes.map(it => it.cloneNode(true))
 })
 
-const workingDocument = new DOMParser().parseFromString('<html><head></head><body></body></html>', 'text/html')
+// Need body below, so I can add element there below
+const workingDocument = new DOMParser().parseFromString('<html><body></body></html>', 'text/html')
 
 let latestContextElement: HTMLElement | undefined
 
@@ -18,60 +19,39 @@ document.addEventListener('contextmenu', event => {
 	latestContextElement = event.target as HTMLElement | undefined
 }, true)
 
-/**
- * a hack to work around facing https://stackoverflow.com/questions/71975696/serialized-and-deserialize-html-style-tag-with-css
- * tries to replace &gt; with > only in CSS nodes
- *
- * implementation wise it's doing the whole splitting and joining because:
- * - need to make sure to do replacements only in style nodes
- * - can't do overlapping regex replaces
- */
-function fixCssSerialization(htmlStr: string) {
-	const replace = (str: string) => str.replaceAll('&gt;', '>')
-
-	const styleParts = htmlStr.split(/(<style)/)
-		.flatMap(it => it.split(/(<\/style>)/))
-
-	for (let i = 1; i < styleParts.length; i++) {
-		if (styleParts[i - 1] === '<style') {
-			styleParts[i] = replace(styleParts[i])
-		}
-	}
-
-	return styleParts.map(replace).join('')
-}
-
 export const setupEventHandlers = () => {
 	browser.runtime.onMessage.addListener(async message => {
-		if (message.type === 'copy-page-fragment') {
-			const element = latestContextElement
-			if (!element) return
-
-			const container = workingDocument.createElement('div')
-
-			console.log('a', await docStyleNodes())
-
-			container.append(
-				...await docStyleNodes(),
-				cloneWithStyle(element),
-			)
-
-
-			workingDocument.body.append(container)
-
-			// const html = fixCssSerialization(container.outerHTML)
-			const html = container.outerHTML
-			console.log(html)
-
-			navigator.clipboard.writeText(html)
-
-			workingDocument.removeChild(container)
-		}
+		if (message.type === 'copy-page-fragment') return copyPageFragment().catch(console.error)
 	})
+}
 
+/**
+ * todo save element link and selector to later be able to refresh it
+ */
+async function copyPageFragment() {
+	const element = latestContextElement
+	if (!element) return
+
+	const container = workingDocument.createElement('div')
+	container.append(
+		...await docStyleNodes(),
+		cloneWithStyle(element),
+	)
+	ensureCssWillSerialize(container)
+
+	navigator.clipboard.writeText(container.outerHTML)
+}
+
+function ensureCssWillSerialize(container: HTMLDivElement) {
 	/**
-	 * save element link and selector to later be able to refresh it
+	 * Doing this as a hack to work around
+	 * https://stackoverflow.com/questions/71975696/serialized-and-deserialize-html-style-tag-with-css
+	 *
+	 * It seems that adding style nodes to the document changes them in some fashion,
+	 * such that serialization works properly only after that.
 	 */
+	workingDocument.body.append(container)
+	workingDocument.body.removeChild(container)
 }
 
 function cloneWithStyle(element: HTMLElement) {

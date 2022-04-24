@@ -7,7 +7,7 @@ export async function getStyleNodes(doc: Document) {
 	const existingNodes = doc.querySelectorAll('style')
 	const nodesFromLinks = await getStyleNodesFromLinks(doc)
 
-	return [...existingNodes, ...nodesFromLinks, newStyleNode(doc, '.a>.b{color:yellow;}')].map(adoptStyle)
+	return [...existingNodes, ...nodesFromLinks].map(adoptStyle)
 }
 
 const getStyleNodesFromLinks = async (doc: Document): Promise<HTMLStyleElement[]> =>
