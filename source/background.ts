@@ -15,7 +15,7 @@ browser.runtime.onMessage.addListener(async (message: any, sender: any) => {
 	}
 })
 
-browser.browserAction.onClicked.addListener(async () => browser.runtime.openOptionsPage())
+browser.action.onClicked.addListener(async () => browser.runtime.openOptionsPage())
 
 const copyPageFragment = 'copy-page-fragment'
 

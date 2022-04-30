@@ -10,8 +10,7 @@ const docStyleNodes = lazy(async () => {
 	return nodes.map(it => it.cloneNode(true))
 })
 
-// Need body below, so I can add element there below
-const workingDocument = new DOMParser().parseFromString('<html><body></body></html>', 'text/html')
+const workingDocument = document.implementation.createHTMLDocument()
 
 let latestContextElement: HTMLElement | undefined
 

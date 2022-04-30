@@ -1,7 +1,6 @@
 import tippy, {Instance as Tippy} from 'tippy.js'
 import {isKeyDown} from '../common/keyboard'
 
-// @ts-ignore parcel
 import shadowCss from 'bundle-text:../content/shadow.css'
 import {IntroShownCount} from './introduction-counter'
 
