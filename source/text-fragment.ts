@@ -9,6 +9,8 @@ import * as browser from 'webextension-polyfill'
 // todo try adding types
 // @ts-ignore no type definitions available
 import {JSDOM} from './external/jsdom'
+// @ts-ignore no type definitions available
+import {globalJsdom} from './external/global-jsdom'
 import {fetchText} from './common/fetch'
 import {getStyleNodes} from './style-extractor'
 
@@ -25,6 +27,8 @@ export const getHighlightedPageElementsFromContentScript = async (url: string): 
  * for headers - probably want to include the following paragraph
  */
 export async function getHighlightedPageElements(href: string): Promise<Array<string>> {
+	globalJsdom()
+
 	const url = new URL(href)
 	const directives = parseFragmentDirectives(getFragmentDirectives(url.hash))
 

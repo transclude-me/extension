@@ -10,8 +10,13 @@ browser.runtime.onMessage.addListener(async (message: any, sender: any) => {
 		return fetchText(message.url)
 	}
 
-	if (message.type === 'get-fragment-elements') {
-		return getHighlightedPageElements(message.url)
+	try {
+		if (message.type === 'get-fragment-elements') {
+			return await getHighlightedPageElements(message.url)
+		}
+	} catch (e) {
+		console.error(e)
+		return null
 	}
 })
 

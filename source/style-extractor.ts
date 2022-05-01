@@ -5,7 +5,7 @@ const fetchedFromStyleAttribute = 'fetched-from-link'
 
 export async function getStyleNodes(doc: Document) {
 	const existingNodes = doc.querySelectorAll('style')
-	const nodesFromLinks = await getStyleNodesFromLinks(doc)
+	const nodesFromLinks = [] // todo await getStyleNodesFromLinks(doc)
 
 	return [...existingNodes, ...nodesFromLinks].map(adoptStyle)
 }
