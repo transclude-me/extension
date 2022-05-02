@@ -5,12 +5,6 @@ import {
 	// @ts-ignore no type definitions available
 } from 'text-fragments-polyfill/src/text-fragment-utils'
 import * as browser from 'webextension-polyfill'
-// import {DOMParser, parseHTML} from 'linkedom'
-// todo try adding types
-// @ts-ignore no type definitions available
-import {JSDOM} from './external/jsdom'
-// @ts-ignore no type definitions available
-import {globalJsdom} from './external/global-jsdom'
 import {fetchText} from './common/fetch'
 import {getStyleNodes} from './style-extractor'
 
@@ -27,8 +21,6 @@ export const getHighlightedPageElementsFromContentScript = async (url: string): 
  * for headers - probably want to include the following paragraph
  */
 export async function getHighlightedPageElements(href: string): Promise<Array<string>> {
-	globalJsdom()
-
 	const url = new URL(href)
 	const directives = parseFragmentDirectives(getFragmentDirectives(url.hash))
 
@@ -71,11 +63,8 @@ const getCommonAncestor = (nodes: Node[]): HTMLElement | null => {
 }
 
 const loadDocument = async (url: URL) => {
-	// const doc = new DOMParser().parseFromString(await fetchText(url.href), 'text/html')
-	const doc = new JSDOM(await fetchText(url.href), {url: url.href}).window.document
-	// const doc = new JSDOM('' ).window.document
-	// const doc = new Document()
-	// injectBase(doc, url)
+	const doc = new DOMParser().parseFromString(await fetchText(url.href), 'text/html')
+	injectBase(doc, url)
 	return doc
 }
 

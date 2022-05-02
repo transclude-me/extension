@@ -1,24 +1,9 @@
 import './options/options-storage'
 
 import * as browser from 'webextension-polyfill'
-import {fetchText} from './common/fetch'
-import {getHighlightedPageElements} from './text-fragment'
 
-browser.runtime.onMessage.addListener(async (message: any, sender: any) => {
-	console.log('background.ts:', message, sender)
-	if (message.type === 'fetch-background') {
-		return fetchText(message.url)
-	}
-
-	try {
-		if (message.type === 'get-fragment-elements') {
-			return await getHighlightedPageElements(message.url)
-		}
-	} catch (e) {
-		console.error(e)
-		return null
-	}
-})
+// TODO: having a message listener here would interfere with ability
+//  to returns result from iframe listener 🤔
 
 browser.action.onClicked.addListener(async () => browser.runtime.openOptionsPage())
 

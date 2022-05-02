@@ -2,8 +2,22 @@ import {Options} from '../options/options-storage'
 import {render} from '../rendering/link-renderer'
 import {showTippy} from '../utils/tippy'
 import {setupEventHandlers} from './copy-fragment'
+import * as browser from 'webextension-polyfill'
 
 setupEventHandlers()
+
+async function setupBackgroundSimulation() {
+	const iframe = document.createElement('iframe')
+	iframe.src = browser.runtime.getURL('content/background-simulation/index.html')
+	iframe.style.display = 'none'
+	document.body.appendChild(iframe)
+
+	return new Promise(resolve => {
+		iframe.onload = () => {
+			resolve(iframe)
+		}
+	})
+}
 
 const linkSelector = 'a, area'
 const linkPreviewClass = 'link-with-preview'
@@ -52,6 +66,8 @@ const shouldRenderPreviews = async () => {
 
 const loadExtension = async () => {
 	if (await shouldRenderPreviews()) {
+		await setupBackgroundSimulation()
+
 		void initPreviews()
 		watchAndInitNewLinks()
 	}

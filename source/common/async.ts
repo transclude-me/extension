@@ -26,3 +26,7 @@ export const mapAsync = async <T, R>(arr: Array<T>, asyncCallback: (item: T) => 
 	const mapped = arr.map(asyncCallback)
 	return Promise.all(mapped)
 }
+
+export const delay = (ms: number) => new Promise(resolve => {
+	setTimeout(resolve, ms)
+})
