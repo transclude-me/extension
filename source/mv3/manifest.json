@@ -4,7 +4,7 @@
 	"description": "Make web more context rich by enabling in-place context-specific previews for links",
 	"homepage_url": "https://github.com/transclude-me/extension",
 	"manifest_version": 3,
-	"minimum_chrome_version": "74",
+	"minimum_chrome_version": "88",
 	"browser_specific_settings": {
 		"gecko": {
 			"id": "transclude-me@stvad",
@@ -12,19 +12,21 @@
 		}
 	},
 	"icons": {
-		"48": "resources/logo-48.png",
-		"96": "resources/logo-96.png",
-		"128": "resources/logo-128.png"
+		"48": "../resources/logo-48.png",
+		"96": "../resources/logo-96.png",
+		"128": "../resources/logo-128.png"
 	},
 	"action": {
-		"default_icon": "resources/logo-128.png",
+		"default_icon": "../resources/logo-128.png",
 		"default_title": "Transclude Me"
 	},
 	"permissions": [
 		"<all_urls>",
 		"storage",
 		"contextMenus",
-		"clipboardWrite"
+		"clipboardWrite",
+		"webNavigation",
+		"tabs"
 	],
 	"content_scripts": [
 		{
@@ -32,26 +34,26 @@
 				"<all_urls>"
 			],
 			"js": [
-				"content/index.ts"
+				"../content/index.ts"
 			],
 			"css": [
-				"content/index.css"
+				"../content/index.css"
 			],
 			"run_at": "document_end"
 		}
 	],
 	"options_ui": {
 		"browser_style": true,
-		"page": "options/options.html"
+		"page": "../options/options.html"
 	},
 	"background": {
-		"service_worker": "background.ts",
+		"service_worker": "../background.ts",
 		"type": "module"
 	},
 	"web_accessible_resources": [
 		{
 			"resources": [
-				"content/background-simulation/index.html"
+				"../content/background-simulation/index.html"
 			],
 			"matches": [
 				"<all_urls>"

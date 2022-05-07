@@ -1,6 +1,6 @@
 import {ReactElement} from 'react'
-import {getHighlightedPageElementsFromContentScript} from '../text-fragment'
 import {LinkRenderer} from './link-renderer'
+import {backgroundSimulation} from '../content/background-simulation/utils'
 
 export class TextFragmentRenderer implements LinkRenderer {
 	async canRender(url: URL): Promise<boolean> {
@@ -8,7 +8,10 @@ export class TextFragmentRenderer implements LinkRenderer {
 	}
 
 	async render(url: URL): Promise<ReactElement> {
-		const elementsByFragment = await getHighlightedPageElementsFromContentScript(url.href)
+		const elementsByFragment = await backgroundSimulation.execute({
+			type: 'get-fragment-elements',
+			url: url.href,
+		}) as Array<string>
 
 		return <div className={'text-fragment-preview'}>
 			{elementsByFragment.map((elements, index) =>

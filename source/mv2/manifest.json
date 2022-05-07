@@ -1,0 +1,58 @@
+{
+	"name": "Transclude Me",
+	"version": "1.1.0",
+	"description": "Make web more context rich by enabling in-place context-specific previews for links",
+	"homepage_url": "https://github.com/transclude-me/extension",
+	"manifest_version": 2,
+	"minimum_chrome_version": "88",
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "transclude-me@stvad",
+			"strict_min_version": "67.0"
+		}
+	},
+	"icons": {
+		"48": "../resources/logo-48.png",
+		"96": "../resources/logo-96.png",
+		"128": "../resources/logo-128.png"
+	},
+	"browser_action": {
+		"default_icon": "../resources/logo-128.png",
+		"default_title": "Transclude Me"
+	},
+	"permissions": [
+		"<all_urls>",
+		"storage",
+		"contextMenus",
+		"clipboardWrite",
+		"webNavigation",
+		"tabs"
+	],
+	"content_scripts": [
+		{
+			"matches": [
+				"<all_urls>"
+			],
+			"js": [
+				"../content/index.ts"
+			],
+			"css": [
+				"../content/index.css"
+			],
+			"run_at": "document_end"
+		}
+	],
+	"options_ui": {
+		"browser_style": true,
+		"page": "../options/options.html"
+	},
+	"background": {
+		"persistent": false,
+		"scripts": [
+			"../background.ts"
+		]
+	},
+	"web_accessible_resources": [
+		"../content/background-simulation/index.html"
+	]
+}

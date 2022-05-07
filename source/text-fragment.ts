@@ -11,6 +11,7 @@ import {getStyleNodes} from './style-extractor'
 export const getHighlightedPageElementsFromContentScript = async (url: string): Promise<Array<string>> =>
 	browser.runtime.sendMessage({
 		type: 'get-fragment-elements',
+		destination: 'background-simulation',
 		url,
 	})
 
