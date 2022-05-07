@@ -24,9 +24,7 @@
 		"<all_urls>",
 		"storage",
 		"contextMenus",
-		"clipboardWrite",
-		"webNavigation",
-		"tabs"
+		"clipboardWrite"
 	],
 	"content_scripts": [
 		{
