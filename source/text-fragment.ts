@@ -4,16 +4,8 @@ import {
 	processFragmentDirectives,
 	// @ts-ignore no type definitions available
 } from 'text-fragments-polyfill/src/text-fragment-utils'
-import * as browser from 'webextension-polyfill'
 import {fetchText} from './common/fetch'
 import {getStyleNodes} from './style-extractor'
-
-export const getHighlightedPageElementsFromContentScript = async (url: string): Promise<Array<string>> =>
-	browser.runtime.sendMessage({
-		type: 'get-fragment-elements',
-		destination: 'background-simulation',
-		url,
-	})
 
 /**
  * Todo:

@@ -1,58 +1,42 @@
-import * as browser from 'webextension-polyfill'
-import {Runtime} from 'webextension-polyfill'
 import {getHighlightedPageElements} from '../../text-fragment'
-import MessageSender = Runtime.MessageSender
 
 /**
  * Background page simulation in iframe
  */
 
-browser.runtime.onMessage.addListener(async (message: any, sender: MessageSender) => {
-	console.log('iframe-background', message, sender)
-	if (message.destination !== 'background-simulation') {
-		// need this guard because in Chrome sendMessage is indiscriminate and gonna send us
-		// all messages from content scripts
-		return
-	}
-
-	try {
-		if (message.type === 'get-fragment-elements') {
-			return getHighlightedPageElements(message.url)
-		}
-	} catch (e) {
-		console.error(e)
-	}
-})
-
 window.addEventListener('message', async event => {
-	console.log(event.data)
+	console.log('iframe-background', event.data)
 	const {commandId} = event.data
 	try {
+		/**
+		 * Each case must return on successful handling
+		 */
 		if (event.data.type === 'get-fragment-elements') {
 			const result = await getHighlightedPageElements(event.data.url)
-			setResult(commandId, result)
-
-			return
+			return postResult(commandId, result)
 		}
 	} catch (e) {
 		console.error(e)
-		setError(commandId, e)
-		return
+		return postError(commandId, e)
 	}
 
 	if (commandId) {
-		setError(commandId, `No command handler found for ${event.data.type}`)
+		postError(commandId, `No command handler found for ${event.data.type}`)
 	}
 })
 
-const setError = (commandId: string, message: any) => {
-	browser.storage.local.set({
-		[commandId]: JSON.stringify({error: message}),
-	})
+function postToParent(commandId: string, fragment: any) {
+	window.parent.postMessage({
+		type: 'command-result',
+		id: commandId,
+		...fragment,
+	}, '*')
 }
 
-const setResult = (commandId: string, content: any) => {
-	browser.storage.local.set({
-		[commandId]: JSON.stringify({result: content}),
-	})
+const postError = (commandId: string, message: any) => {
+	postToParent(commandId, {error: message})
+}
+
+const postResult = (commandId: string, content: any) => {
+	postToParent(commandId, {result: content})
 }

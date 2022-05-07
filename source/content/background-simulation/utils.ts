@@ -1,5 +1,4 @@
 import * as browser from 'webextension-polyfill'
-import {delay} from '../../common/async'
 
 interface Command {
 	type: string
@@ -7,6 +6,7 @@ interface Command {
 
 class BackgroundSimulation {
 	iframe: HTMLIFrameElement | undefined
+	ongoingExecutions: Map<string, [resolve: (value: any) => void, reject: (reason?: any) => void]> = new Map()
 
 	get url(): string {
 		// up_ thing is from manifest being in subdirectory and parcel rewriting the path to `up_` instead of `..`
@@ -17,6 +17,8 @@ class BackgroundSimulation {
 		if (this.iframe) return this.iframe
 		const iframe = createIframe(this.url)
 
+		this.setupExecutionResultHandler()
+
 		return new Promise(resolve => {
 			iframe.onload = () => {
 				this.iframe = iframe
@@ -25,42 +27,32 @@ class BackgroundSimulation {
 		})
 	}
 
-	async execute<T extends Command>(command: T, maxDelaySize: number = 512): Promise<any> {
-		const commandId = this.initiateExecution(command)
-		const result = await this.waitForResult(commandId, maxDelaySize)
-		this.cleanupExecution(commandId)
-		return this.parseResult(result)
+	private setupExecutionResultHandler() {
+		window.addEventListener('message', event => {
+			if (event.data.type === 'command-result') {
+				const [resolve, reject] = this.ongoingExecutions.get(event.data.id)!
+				if (event.data.result) {
+					resolve(event.data.result)
+				} else {
+					reject(event.data.error)
+				}
+
+				this.ongoingExecutions.delete(event.data.id)
+			}
+		})
 	}
 
-	private async waitForResult(commandId: string, maxDelaySize: number) {
-		let nextDelay = 0
-		let result: any
-		do {
-			await delay(nextDelay)
-			result = (await browser.storage.local.get(commandId))[commandId]
-			nextDelay = (nextDelay * 2) || 16
-		} while (!result || nextDelay < maxDelaySize)
-
-		return result
+	async execute<T extends Command>(command: T): Promise<any> {
+		const commandId = this.initiateExecution(command)
+		return new Promise((resolve, reject) => {
+			this.ongoingExecutions.set(commandId, [resolve, reject])
+		})
 	}
 
 	private initiateExecution<T>(command: T) {
-		const commandId = 'command-' + crypto.randomUUID()
+		const commandId = crypto.randomUUID()
 		this.iframe?.contentWindow?.postMessage({...command, commandId}, '*')
 		return commandId
-	}
-
-	private parseResult(result: any) {
-		const parsed = JSON.parse(result)
-		if (parsed.error) {
-			throw new Error(parsed.error)
-		}
-
-		return parsed.result
-	}
-
-	private cleanupExecution(commandId: string) {
-		return browser.storage.local.remove(commandId)
 	}
 }
 
