@@ -9,7 +9,7 @@
 		"clean:firefox": "rm -rf build/firefox",
 		"package:firefox": "web-ext build --overwrite-dest --source-dir build/firefox --filename firefox.zip",
 		"package:chrome": "web-ext build --overwrite-dest --source-dir build/chrome --filename chrome.zip",
-		"prepublish": "run-s clean:* build:* package:*",
+		"prepare-for-publishing": "run-s clean:* build:* package:*",
 		"lint": "run-p lint:*",
 		"lint-fix": "run-p 'lint:* -- --fix'",
 		"lint:css": "stylelint --config .stylelintrc.yml source/**/*.css",
