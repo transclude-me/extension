@@ -3,11 +3,10 @@
 <a href="https://addons.mozilla.org/en-US/firefox/addon/transclude-me/">
 	<img height="58" src="./media/firefox-store.png" alt="Firefox add-ons">
 </a>
-<!--
-<a href="todo">
+<a href="https://chrome.google.com/webstore/detail/transclude-me/peekobjabbjacffbhjmlkadjlkniofje">
 	<img height="58" src="./media/chrome-store.png" alt="Chrome Web Store">
 </a>
--->
+
 
 Make web more context rich by enabling in-place context-specific previews for links.
 
