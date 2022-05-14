@@ -3,8 +3,10 @@ import {setupEventHandlers} from './copy-fragment'
 import {backgroundSimulation} from './background-simulation/utils'
 // Todo for some reason this is not working, but direct src import works 🤔
 // import {initPreviews, defaultRenderers} from 'link-summoner'
-import {initPreviews, IframeRenderer, siteSpecificRenderers} from 'link-summoner/src'
+import {initPreviews, IframeRenderer, siteSpecificRenderers, shadowRoot} from 'link-summoner/src'
 import {TextFragmentRenderer} from '../rendering/text-fragment-renderer'
+import {buttonPressPlugin, showOnboardingTooltip} from './onboarding-tooltip'
+import shadowCss from 'bundle-text:./shadow.css'
 
 setupEventHandlers()
 
@@ -26,9 +28,29 @@ const loadExtension = async () => {
 					await Options.iframe.domainWhitelist(),
 					await Options.iframe.subdomainWhitelist()),
 			],
+			tippyOptions: {
+				plugins: [buttonPressPlugin()],
+			},
 		})
+
+		initOnboardingTooltips()
+
+		addExtensionStylesToPopup()
 	}
 }
 
 void loadExtension()
+
+function initOnboardingTooltips() {
+	Array.from(document.links).forEach(it => {
+		void showOnboardingTooltip(it, shadowRoot as unknown as Element)
+	})
+}
+
+function addExtensionStylesToPopup() {
+	const style = document.createElement('style')
+	style.innerText = shadowCss
+
+	shadowRoot.append(style)
+}
 
