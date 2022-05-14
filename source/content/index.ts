@@ -3,7 +3,7 @@ import {setupEventHandlers} from './copy-fragment'
 import {backgroundSimulation} from './background-simulation/utils'
 // Todo for some reason this is not working, but direct src import works 🤔
 // import {initPreviews, defaultRenderers} from 'link-summoner'
-import {initPreviews, defaultRenderers} from 'link-summoner/src/index'
+import {initPreviews, IframeRenderer, siteSpecificRenderers} from 'link-summoner/src'
 import {TextFragmentRenderer} from '../rendering/text-fragment-renderer'
 
 setupEventHandlers()
@@ -21,7 +21,10 @@ const loadExtension = async () => {
 		await initPreviews({
 			renderers: [
 				new TextFragmentRenderer(),
-				...defaultRenderers,
+				...siteSpecificRenderers,
+				new IframeRenderer(
+					await Options.iframe.domainWhitelist(),
+					await Options.iframe.subdomainWhitelist()),
 			],
 		})
 	}
