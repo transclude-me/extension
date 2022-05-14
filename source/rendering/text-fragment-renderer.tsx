@@ -1,22 +1,26 @@
-import {ReactElement} from 'react'
-import {LinkRenderer} from './link-renderer'
+import {LinkRenderer} from 'link-summoner'
 import {backgroundSimulation} from '../content/background-simulation/utils'
 
 export class TextFragmentRenderer implements LinkRenderer {
-	async canRender(url: URL): Promise<boolean> {
-		return url.href.includes(':~:')
-	}
+	canRender = async (url: URL) => url.href.includes(':~:')
 
-	async render(url: URL): Promise<ReactElement> {
+	async render(url: URL): Promise<HTMLElement> {
 		const elementsByFragment = await backgroundSimulation.execute({
 			type: 'get-fragment-elements',
 			url: url.href,
 		}) as Array<string>
 
-		return <div className={'text-fragment-preview'}>
-			{elementsByFragment.map((elements, index) =>
-				<div key={index} dangerouslySetInnerHTML={{__html: elements}}/>,
-			)}
-		</div>
+		const container = document.createElement('div')
+		container.className = 'text-fragment-preview'
+
+		container.append(...elementsByFragment.map(rehydrate))
+
+		return container
 	}
+}
+
+function rehydrate(elementString: string) {
+	const elementContainer = document.createElement('div')
+	elementContainer.innerHTML = elementString
+	return elementContainer
 }

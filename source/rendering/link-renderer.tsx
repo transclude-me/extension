@@ -1,7 +1,6 @@
 import {ReactElement} from 'react'
 import * as ReactDOM from 'react-dom'
 
-import {TextFragmentRenderer} from './text-fragment-renderer'
 import {IframeRenderer} from './iframe-renderer'
 import {WikipediaRenderer} from './wikipedia-renderer'
 import {findAsync, someAsync} from '../common/async'
@@ -16,7 +15,6 @@ export interface LinkRenderer {
  * Order is priority
  */
 const allRenderers: LinkRenderer[] = [
-	new TextFragmentRenderer(),
 	new WikipediaRenderer(),
 	new IframeRenderer(),
 ]
