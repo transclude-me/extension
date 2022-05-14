@@ -72,6 +72,7 @@ requires you to reload the page to reload the content scripts.
 
 ### Infrastructure
 
+- [link-summoner library](https://github.com/Stvad/link-summoner) that allows you to add live previews to any website
 - [Parcel’s Web Extension transformer documentation](https://parceljs.org/recipes/web-extension/)
 - Options are managed by [fregante/webext-options-sync][link-options-sync], which auto-saves and
   auto-restores the options form, applies defaults and runs migrations.
