@@ -52,6 +52,7 @@ rules:
     - multi-line
   no-prototype-builtins: off
   no-undef: off
+  no-mixed-operators: off
 
 parser: '@typescript-eslint/parser'
 parserOptions:

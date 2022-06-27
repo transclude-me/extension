@@ -1,12 +1,13 @@
 import {Options} from '../options/options-storage'
 import {setupEventHandlers} from './copy-fragment'
 import {backgroundSimulation} from './background-simulation/utils'
-// Todo for some reason this is not working, but direct src import works 🤔
-// import {initPreviews, defaultRenderers} from 'link-summoner'
-import {initPreviews, IframeRenderer, siteSpecificRenderers, getShadowRoot} from 'link-summoner/src'
+import {initPreviews, IframeRenderer, siteSpecificRenderers, getShadowRoot} from 'link-summoner'
 import {TextFragmentRenderer} from '../rendering/text-fragment-renderer'
 import {buttonPressPlugin, showOnboardingTooltip} from './onboarding-tooltip'
 import shadowCss from 'bundle-text:./shadow.css'
+import {setupSidebar} from './sidebar'
+
+setupSidebar()
 
 setupEventHandlers()
 
