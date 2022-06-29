@@ -8,7 +8,6 @@ export interface StackedPageProps {
 	pageOrder?: number
 }
 
-
 export const StackedPage = (props: StackedPageProps) => {
 
 	return <div
@@ -21,7 +20,7 @@ export const StackedPage = (props: StackedPageProps) => {
 		`}
 	>
 		<div className={'note-content'}>
-			<iframe src={'https://en.m.wikipedia.org/wiki/Transclusion'}></iframe>
+			{props.children}
 		</div>
 
 		<div className="obstructed-note-label">

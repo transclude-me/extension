@@ -45,6 +45,19 @@ void loadExtension()
 function initOnboardingTooltips() {
 	Array.from(document.links).forEach(it => {
 		void showOnboardingTooltip(it, getShadowRoot() as unknown as Element)
+
+		it.addEventListener('click', (ev: MouseEvent) => {
+			console.log('clisk!')
+			if (!(ev.altKey && ev.shiftKey)) return
+
+			ev.stopPropagation()
+			ev.preventDefault()
+			window.postMessage({type: 'add-stack-url', url: it.href}, '*')
+			// browser.runtime.sendMessage({
+			// 	type: 'add-stack-url',
+			// 	url: it.href,
+			// })
+		})
 	})
 }
 

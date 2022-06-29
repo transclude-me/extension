@@ -15,24 +15,51 @@ export const Sidebar = () => {
 	// todo show a loading indicator instead of emptiness
 	const [url, setUrl] = useState('')
 
+	const [linksToRender, setLinksToRender] =
+		useState<Array<string>>([])
+
+	/**
+	 [
+			'https://en.m.wikipedia.org/wiki/Transclusion',
+			'https://manifold.markets/dreev/will-fully-autonomous-level-5-selfd',
+			'https://www.gwern.net/Design',
+			'https://www.lesswrong.com/posts/2cYebKxNp47PapHTL/cryonics-signup-guide-1-overview/',
+		]
+	 */
+
 	const pageWidth = 625
 	const obstructedPageWidth = 40
 
 	useEffect(() => {
 		// todo
 		const messageCallback = (event: any) => {
-			console.log('content-script container ev', event)
-			if (event.type === 'update-panel-url') {
-				setUrl(event.url)
+			console.log('content-script sidebar', event)
+			if (event.type === 'add-stack-url') {
+				setLinksToRender([...linksToRender, event.url])
 			} else if (event.type === 'toggle-sidebar') {
 				setOpen(!isOpen)
 			}
 		}
 
-		browser.runtime.onMessage.addListener(messageCallback)
+		const windowMessageCallback = (event: any) => {
+			// const messageIsFromSidebar = url.startsWith(event.origin)
+			// if (messageIsFromSidebar) {
+			if ('data' in event) {
+				// redirect the relevant part of the message to the actual callback
+				messageCallback(event.data)
+			}
+			// }
+		}
 
-		return () => browser.runtime.onMessage.removeListener(messageCallback)
-	}, [isOpen, setOpen])
+		browser.runtime.onMessage.addListener(messageCallback)
+		window.addEventListener('message', windowMessageCallback)
+
+
+		return () => {
+			browser.runtime.onMessage.removeListener(messageCallback)
+			window.removeEventListener('message', windowMessageCallback)
+		}
+	}, [isOpen, setOpen, linksToRender])
 
 	const [scroll, containerWidth, setRef, containerRef] = useScroll()
 
@@ -58,6 +85,15 @@ export const Sidebar = () => {
 	}, [containerRef, scroll])
 
 	function derivePageState(pageOrder: number, numberOfPages: number) {
+		if (pageOrder === 0) {
+			return {
+				obstructed: false,
+				highlighted: false,
+				overlay: scroll > pageWidth - obstructedOffset,
+				active: true,
+			}
+		}
+
 		return {
 			highlighted: false,
 			overlay:
@@ -100,10 +136,12 @@ export const Sidebar = () => {
 					width: ${pageWidth * (numberOfPages + 1)};
 				`}
 			>
-				<StackedPage {...derivePageState(0, numberOfPages)}/>
-				<StackedPage {...derivePageState(1, numberOfPages)}/>
-				<StackedPage {...derivePageState(2, numberOfPages)}/>
-				<StackedPage {...derivePageState(3, numberOfPages)}/>
+				{
+					linksToRender.map((it, idx) =>
+						<StackedPage {...derivePageState(idx, linksToRender.length + 1)}>
+							<iframe src={it}/>
+						</StackedPage>)
+				}
 			</div>
 		</div>
 	</Slider>
@@ -119,6 +157,6 @@ const styles = {
 	bmMenuWrap: {
 		zIndex: 99999,
 		top: '0px',
-		width: '100vw',
+		width: '40wv', // todo needs to be variable length and resizeable
 	},
 }
