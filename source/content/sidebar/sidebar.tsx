@@ -11,7 +11,7 @@ const obstructedOffset = 120
 
 export const Sidebar = () => {
 	// const [isOpen, setOpen] = useTabLocalState('sidebarOpen', false)
-	const [isOpen, setOpen] = useState(true)
+	const [isOpen, setOpen] = useState(false)
 	// todo show a loading indicator instead of emptiness
 	const [url, setUrl] = useState('')
 
@@ -36,6 +36,7 @@ export const Sidebar = () => {
 			console.log('content-script sidebar', event)
 			if (event.type === 'add-stack-url') {
 				setLinksToRender([...linksToRender, event.url])
+				setOpen(true)
 			} else if (event.type === 'toggle-sidebar') {
 				setOpen(!isOpen)
 			}
@@ -115,7 +116,7 @@ export const Sidebar = () => {
 		}
 	}
 
-	const numberOfPages = 4
+	const numberOfPages = linksToRender.length
 
 	return <Slider
 		isOpen={isOpen}
@@ -133,7 +134,7 @@ export const Sidebar = () => {
 			<div
 				className="note-columns-container"
 				css={css`
-					width: ${pageWidth * (numberOfPages + 1)};
+					width: ${pageWidth * (numberOfPages)}px;
 				`}
 			>
 				{
@@ -157,6 +158,7 @@ const styles = {
 	bmMenuWrap: {
 		zIndex: 99999,
 		top: '0px',
-		width: '40wv', // todo needs to be variable length and resizeable
+		width: 'fit-content',
+		maxWidth: '40vw', // todo needs to be variable length and resizeable
 	},
 }
