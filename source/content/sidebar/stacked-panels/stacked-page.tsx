@@ -1,8 +1,8 @@
 import {css} from '@emotion/react'
 import {HTMLAttributes, useEffect, useState} from 'react'
 import {render} from 'link-summoner'
-import {getExtensionRenderers} from '../renderer-configuration'
-import {RawElementAdapter} from '../../rendering/components/RawElementAdapter'
+import {getExtensionRenderers} from '../../renderer-configuration'
+import {RawElementAdapter} from '../../../rendering/components/RawElementAdapter'
 
 export interface StackedPageProps extends HTMLAttributes<HTMLDivElement> {
 	obstructed?: boolean
