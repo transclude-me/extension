@@ -3,7 +3,7 @@ import * as browser from 'webextension-polyfill'
 import {slide as Slider} from 'react-burger-menu'
 import {useEffect, useState} from 'react'
 import {ScrollState, useScroll} from './stacked-panels/hooks'
-import {StackedPage} from './stacked-page'
+import {LinkRendererStackedPage} from './stacked-page'
 import {css} from '@emotion/react'
 // import {useTabLocalState} from '../../core/react'
 
@@ -11,9 +11,8 @@ const obstructedOffset = 120
 
 export const Sidebar = () => {
 	// const [isOpen, setOpen] = useTabLocalState('sidebarOpen', false)
-	const [isOpen, setOpen] = useState(false)
 	// todo show a loading indicator instead of emptiness
-	const [url, setUrl] = useState('')
+	const [isOpen, setOpen] = useState(false)
 
 	const [linksToRender, setLinksToRender] =
 		useState<Array<string>>([])
@@ -124,6 +123,7 @@ export const Sidebar = () => {
 		right
 		noOverlay
 		customBurgerIcon={false}
+		// @ts-ignore
 		styles={styles}
 		// This is mainly here to ensure that when menu is closed
 		// by internal element logic we're aware and maintain proper state
@@ -139,9 +139,11 @@ export const Sidebar = () => {
 			>
 				{
 					linksToRender.map((it, idx) =>
-						<StackedPage {...derivePageState(idx, linksToRender.length + 1)}>
-							<iframe src={it}/>
-						</StackedPage>)
+						<LinkRendererStackedPage
+							key={idx}
+							url={it}
+							{...derivePageState(idx, linksToRender.length + 1)}
+						/>)
 				}
 			</div>
 		</div>
