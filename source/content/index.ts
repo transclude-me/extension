@@ -1,13 +1,15 @@
 import {Options} from '../options/options-storage'
 import {setupEventHandlers} from './copy-fragment'
 import {backgroundSimulation} from './background-simulation/utils'
-import {initPreviews, IframeRenderer, siteSpecificRenderers, getShadowRoot} from 'link-summoner'
-import {TextFragmentRenderer} from '../rendering/text-fragment-renderer'
+import {getShadowRoot, initPreviews} from 'link-summoner'
 import {buttonPressPlugin, showOnboardingTooltip} from './onboarding-tooltip'
 import shadowCss from 'bundle-text:./shadow.css'
 import {setupSidebar} from './sidebar'
+import {getExtensionRenderers} from './renderer-configuration'
 
-setupSidebar()
+const inIframe = window !== window.parent
+
+if (!inIframe) setupSidebar()
 
 setupEventHandlers()
 
@@ -22,13 +24,7 @@ const loadExtension = async () => {
 		await backgroundSimulation.setup()
 
 		await initPreviews({
-			renderers: [
-				new TextFragmentRenderer(),
-				...siteSpecificRenderers,
-				new IframeRenderer(
-					await Options.iframe.domainWhitelist(),
-					await Options.iframe.subdomainWhitelist()),
-			],
+			renderers: await getExtensionRenderers(),
 			tippyOptions: {
 				plugins: [buttonPressPlugin()],
 			},
@@ -47,19 +43,17 @@ function initOnboardingTooltips() {
 		void showOnboardingTooltip(it, getShadowRoot() as unknown as Element)
 
 		it.addEventListener('click', (ev: MouseEvent) => {
-			console.log('clisk!')
 			if (!(ev.altKey && ev.shiftKey)) return
 
 			ev.stopPropagation()
 			ev.preventDefault()
-			window.postMessage({type: 'add-stack-url', url: it.href}, '*')
-			// browser.runtime.sendMessage({
-			// 	type: 'add-stack-url',
-			// 	url: it.href,
-			// })
+
+			// .parent because we want to send it to the parent if we're in iframe, and it's same as `window` if we are not
+			window.parent.postMessage({type: 'add-stack-url', url: it.href}, '*')
 		})
 	})
 }
+
 
 function addExtensionStylesToPopup() {
 	const style = document.createElement('style')
