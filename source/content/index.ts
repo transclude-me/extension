@@ -42,7 +42,7 @@ function initOnboardingTooltips() {
 	Array.from(document.links).forEach(it => {
 		void showOnboardingTooltip(it, getShadowRoot() as unknown as Element)
 
-		it.addEventListener('click', (ev: MouseEvent) => {
+		const openInSidebar = (ev: MouseEvent) => {
 			if (!(ev.altKey && ev.shiftKey)) return
 
 			ev.stopPropagation()
@@ -50,7 +50,10 @@ function initOnboardingTooltips() {
 
 			// .parent because we want to send it to the parent if we're in iframe, and it's same as `window` if we are not
 			window.parent.postMessage({type: 'add-stack-url', url: it.href}, '*')
-		})
+		}
+
+		// @ts-ignore todo I'm confused why this does not type check
+		it.addEventListener('click', openInSidebar)
 	})
 }
 

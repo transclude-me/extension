@@ -30,7 +30,7 @@ export function useScroll() {
 
 	const throttledScrollObserver = throttle(scrollObserver, throttleTime)
 
-	const setRef = useCallback((node: HTMLDivElement) => {
+	const setRef = useCallback((node: HTMLDivElement | null) => {
 		if (node) {
 			// When the ref is first set (after mounting)
 			node.addEventListener('scroll', throttledScrollObserver)

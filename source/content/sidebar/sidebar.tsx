@@ -1,23 +1,21 @@
 import * as browser from 'webextension-polyfill'
 
 import {slide as Slider} from 'react-burger-menu'
-import {useEffect, useState} from 'react'
-import {StackedPageContainer} from './stacked-panels/stacked-page-container'
+import {useEffect, useRef, useState} from 'react'
+import {StackedPageContainer, StackedPageContainerHandle} from './stacked-panels/stacked-page-container'
 import {useVariableWidth} from './variable-width'
 
 export const Sidebar = () => {
 	// todo show a loading indicator instead of emptiness
 	const [isOpen, setOpen] = useState(false)
 	const {width, endDrag, startDrag, updateDrag} = useVariableWidth(window.innerWidth * 0.4)
-
-	const [linksToRender, setLinksToRender] =
-		useState<Array<string>>([])
+	const containerRef = useRef<StackedPageContainerHandle | null>(null)
 
 	useEffect(() => {
 		const messageCallback = (event: any) => {
 			console.log('content-script sidebar', event)
 			if (event.type === 'add-stack-url') {
-				setLinksToRender([...linksToRender, event.url])
+				containerRef.current?.addPage(event.url)
 				setOpen(true)
 			} else if (event.type === 'toggle-sidebar') {
 				setOpen(!isOpen)
@@ -38,7 +36,7 @@ export const Sidebar = () => {
 			browser.runtime.onMessage.removeListener(messageCallback)
 			window.removeEventListener('message', windowMessageCallback)
 		}
-	}, [isOpen, setOpen, linksToRender])
+	}, [isOpen, setOpen])
 
 	return <Slider
 		noTransition
@@ -55,7 +53,7 @@ export const Sidebar = () => {
 		onMouseUp={endDrag}
 		onMouseMove={updateDrag}
 	>
-		<StackedPageContainer links={linksToRender}/>
+		<StackedPageContainer ref={containerRef}/>
 		<div
 			className="sidebar__drag"
 			onMouseDown={startDrag}
