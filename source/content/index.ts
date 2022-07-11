@@ -5,6 +5,7 @@ import {getShadowRoot, initPreviews} from 'link-summoner'
 import {buttonPressPlugin, showOnboardingTooltip} from './onboarding-tooltip'
 import shadowCss from 'bundle-text:./shadow.css'
 import {setupSidebar} from './sidebar'
+import {openUrlInSidebar} from './sidebar/common'
 import {getExtensionRenderers} from './renderer-configuration'
 
 const inIframe = window !== window.parent
@@ -47,9 +48,7 @@ function initOnboardingTooltips() {
 
 			ev.stopPropagation()
 			ev.preventDefault()
-
-			// .parent because we want to send it to the parent if we're in iframe, and it's same as `window` if we are not
-			window.parent.postMessage({type: 'add-stack-url', url: it.href}, '*')
+			openUrlInSidebar(it.href)
 		}
 
 		// @ts-ignore todo I'm confused why this does not type check

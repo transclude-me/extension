@@ -1,5 +1,5 @@
 import {css} from '@emotion/react'
-import {LinkRendererStackedPage} from './stacked-page'
+import {LinkRendererStackedPage, StackedPageVisibilityProps} from './stacked-page'
 import {forwardRef, HTMLAttributes, MutableRefObject, Ref, useImperativeHandle, useState} from 'react'
 import {useScroll} from './hooks'
 
@@ -35,7 +35,7 @@ const StackedPageContainerInternal = (props: StackedPageContainerProps, ref: Ref
 
 	const numberOfPages = links.length
 
-	const derivePageState = (pageOrder: number, numberOfPages: number) =>
+	const derivePageState = (pageOrder: number, numberOfPages: number): StackedPageVisibilityProps =>
 		({
 			highlighted: false,
 			overlay:
@@ -53,7 +53,6 @@ const StackedPageContainerInternal = (props: StackedPageContainerProps, ref: Ref
 					0,
 				) || scroll + containerWidth < pageWidth * pageOrder + obstructedOffset,
 			active: pageOrder === numberOfPages - 1,
-			pageOrder,
 		})
 
 	return <div className={'note-columns-scrolling-container'} ref={setRef}>
@@ -68,7 +67,8 @@ const StackedPageContainerInternal = (props: StackedPageContainerProps, ref: Ref
 					<LinkRendererStackedPage
 						key={idx}
 						url={it}
-						{...derivePageState(idx, numberOfPages)}
+						pageOrder={idx}
+						visibility={derivePageState(idx, numberOfPages)}
 					/>)
 			}
 		</div>

@@ -3,19 +3,27 @@ import {HTMLAttributes, useEffect, useState} from 'react'
 import {render} from 'link-summoner'
 import {getExtensionRenderers} from '../../renderer-configuration'
 import {RawElementAdapter} from '../../../rendering/components/RawElementAdapter'
+import {openUrlInSidebar} from '../common'
 
-export interface StackedPageProps extends HTMLAttributes<HTMLDivElement> {
+export interface StackedPageVisibilityProps {
 	obstructed?: boolean
 	overlay?: boolean
 	highlighted?: boolean
 	active?: boolean
+}
+
+export interface StackedPageProps extends HTMLAttributes<HTMLDivElement> {
+	visibility: StackedPageVisibilityProps
 	pageOrder?: number
+	pageName?: string
+	activate?: () => void
+	close?: () => void
 }
 
 export const StackedPage = (props: StackedPageProps) => {
 
 	return <div
-		className={noteContainerClassName(props)}
+		className={noteContainerClassName(props.visibility)}
 		css={css`
 			left: ${40 * (props.pageOrder || 0)}px;
         	right: -585px;
@@ -28,8 +36,11 @@ export const StackedPage = (props: StackedPageProps) => {
 		</div>
 
 		<div className="obstructed-note-label">
-			<span className={'obstructed-label'}>
-				Page
+			<span
+				className={'obstructed-label'}
+				onClick={props.activate}
+			>
+				{props.pageName}
 			</span>
 		</div>
 	</div>
@@ -50,12 +61,16 @@ export const LinkRendererStackedPage = (props: LinkRendererStackedPageProps) => 
 		})()
 	}, [])
 
-	return <StackedPage {...props}>
+	return <StackedPage
+		{...props}
+		pageName={props.url}
+		activate={() => openUrlInSidebar(props.url)}
+	>
 		{content ? <RawElementAdapter elements={[content]}/> : null}
 	</StackedPage>
 }
 
-const noteContainerClassName = ({overlay, obstructed, highlighted}: StackedPageProps = {}) =>
+const noteContainerClassName = ({overlay, obstructed, highlighted}: StackedPageVisibilityProps = {}) =>
 	`note-container ${overlay ? 'note-container-overlay' : ''} ${
 		obstructed ? 'note-container-obstructed' : ''
 	} ${highlighted ? 'note-container-highlighted' : ''}`

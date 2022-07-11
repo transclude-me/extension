@@ -86,6 +86,7 @@ iframe {
 	width: 40px;
 	overflow: hidden;
 	transition: color 0.3s ease;
+	cursor: pointer;
 }
 
 .note-container.note-container-highlighted {
