@@ -42,9 +42,9 @@ To see the preview for a link, hover over the link with the `Alt` key pressed.
 1. Checkout the copied repository to your local machine eg.
    with `git clone git@github.com:transclude-me/extension.git`
 1. Run `yarn` to install all required dependencies
-1. Run `yarn build`
+1. Run `yarn build:firefox` to build the extension with manifest v2
 
-The build step will create the `distribution` folder, this folder will contain the generated
+The build step will create the `build/<browsername>` folder, this folder will contain the generated
 extension.
 
 ### 🏃 Run the extension
@@ -53,11 +53,11 @@ Using [web-ext](https://extensionworkshop.com/documentation/develop/getting-star
 is recommened for automatic reloading and running in a dedicated browser instance. Alternatively you
 can load the extension manually (see below).
 
-1. Run `yarn watch` to watch for file changes and build continuously
-1. Run `npm install --global web-ext` (only only for the first time)
+1. Run `yarn watch:firefox` or `yarn watch:chrome` to watch for file changes and build continuously
+1. Run `npm install --global web-ext` (only for the first time)
 1. In another terminal,
-   run `web-ext run -f https://gist.github.com/Stvad/315bc3ce22b44af7ac71bbfbcaff9777` for Firefox
-   or `web-ext run -t chromium -f https://gist.github.com/Stvad/315bc3ce22b44af7ac71bbfbcaff9777`
+   run `web-ext run -s build/firefox -f https://gist.github.com/Stvad/315bc3ce22b44af7ac71bbfbcaff9777` for Firefox
+   or `web-ext run -s build/chrome -t chromium -f https://gist.github.com/Stvad/315bc3ce22b44af7ac71bbfbcaff9777`
    for Chrome
 
 #### Manually
