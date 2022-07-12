@@ -2,7 +2,11 @@
 	height: 100%;
 }
 
-iframe, div {
+iframe{
+	height: 100%;
+}
+
+.note-content div {
 	height: 100%;
 }
 

@@ -9,6 +9,7 @@ export interface StackedPageContainerProps extends HTMLAttributes<HTMLDivElement
 
 export interface StackedPageContainerHandle {
 	addPage(newPage: string): void
+	pageCount(): number
 }
 
 const pageWidth = 625
@@ -30,6 +31,9 @@ const StackedPageContainerInternal = (props: StackedPageContainerProps, ref: Ref
 			const newLinks = [...links, newPage]
 			setLinks(newLinks)
 			scrollToPage(containerRef, newLinks.length)
+		},
+		pageCount() {
+			return links.length
 		},
 	}))
 
