@@ -1,10 +1,8 @@
 import tippy, {Instance as Tippy} from 'tippy.js'
-import {isKeyDown} from '../../common/keyboard'
 
 import {IntroShownCount} from './introduction-counter'
 
 const defaultKeyName = 'Alt'
-const defaultBlockingKeyName = 'Shift'
 
 /**
  * Only show first ~few times the user is hovering over things
@@ -25,41 +23,39 @@ export async function showOnboardingTooltip(link: HTMLAnchorElement | HTMLAreaEl
  * When the user presses a button whe hovering over the link - show popup
  */
 export const buttonPressPlugin = (
-	keyName: string = defaultKeyName,
-	blockingKey: string = defaultBlockingKeyName, // todo maybe I should check if any other key is pressed?
+	shouldShowTippy: (e: MouseEvent | KeyboardEvent) => Boolean = event => event.altKey && !event.shiftKey,
 ) => ({
 	name: 'showOnButtonPress',
 	defaultValue: true,
 	fn(instance: Tippy) {
 		const originalOnShow = instance.props.onShow
-		let forceShow = false
+		let shouldShow = false
 
 		// Manually override due to https://github.com/atomiks/tippyjs/issues/644
 		instance.props.onShow = (instance: Tippy) => {
-			if (forceShow) {
-				forceShow = false
+			if (!shouldShow) return false
 
-				originalOnShow(instance)
-				return
-			}
-
-			if (!isKeyDown(keyName) || blockingKey && isKeyDown(blockingKey)) return false
+			originalOnShow(instance)
 		}
 
 		const keyDownHandler = (e: KeyboardEvent) => {
-			if (e.key === keyName) {
-				forceShow = true
+			if (shouldShowTippy(e)) {
+				shouldShow = true
 				instance.show()
 			}
 		}
 
 		return {
-			onTrigger(instance: Tippy, event: Event) {
+			onTrigger(_: Tippy, event: MouseEvent) {
+				if (shouldShowTippy(event)) {
+					shouldShow = true
+				}
+
 				document.addEventListener('keydown', keyDownHandler)
 			},
 
-			onUntrigger(instance: Tippy, event: Event) {
-				forceShow = false
+			onUntrigger() {
+				shouldShow = false
 				document.removeEventListener('keydown', keyDownHandler)
 			},
 		}
