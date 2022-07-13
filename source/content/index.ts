@@ -20,6 +20,9 @@ const shouldRenderPreviews = async () => {
 	return blockList.every(domain => !window.location.hostname.endsWith(domain))
 }
 
+const shouldOpenInSidebar = (ev: MouseEvent) =>
+	ev.altKey && ev.shiftKey
+
 const loadExtension = async () => {
 	if (await shouldRenderPreviews()) {
 		await backgroundSimulation.setup()
@@ -28,6 +31,19 @@ const loadExtension = async () => {
 			renderers: await getExtensionRenderers(),
 			tippyOptions: {
 				plugins: [buttonPressPlugin()],
+			},
+			postInit(link) {
+				const openInSidebar = (ev: MouseEvent) => {
+					if (!shouldOpenInSidebar(ev)) return
+
+					ev.stopPropagation()
+					ev.preventDefault()
+
+					openUrlInSidebar(link.href)
+				}
+
+				// @ts-ignore todo I'm confused why this does not type check
+				link.addEventListener('click', openInSidebar)
 			},
 		})
 
@@ -40,22 +56,9 @@ const loadExtension = async () => {
 void loadExtension()
 
 function initOnboardingTooltips() {
-	Array.from(document.links).forEach(it => {
-		void showOnboardingTooltip(it, getShadowRoot() as unknown as Element)
-
-		const openInSidebar = (ev: MouseEvent) => {
-			if (!(ev.altKey && ev.shiftKey)) return
-
-			ev.stopPropagation()
-			ev.preventDefault()
-			openUrlInSidebar(it.href)
-		}
-
-		// @ts-ignore todo I'm confused why this does not type check
-		it.addEventListener('click', openInSidebar)
-	})
+	Array.from(document.links).forEach(it =>
+		showOnboardingTooltip(it, getShadowRoot() as unknown as Element))
 }
-
 
 function addExtensionStylesToPopup() {
 	const style = document.createElement('style')
