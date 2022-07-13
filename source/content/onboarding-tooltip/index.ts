@@ -4,6 +4,7 @@ import {isKeyDown} from '../../common/keyboard'
 import {IntroShownCount} from './introduction-counter'
 
 const defaultKeyName = 'Alt'
+const defaultBlockingKeyName = 'Shift'
 
 /**
  * Only show first ~few times the user is hovering over things
@@ -23,7 +24,10 @@ export async function showOnboardingTooltip(link: HTMLAnchorElement | HTMLAreaEl
 /*
  * When the user presses a button whe hovering over the link - show popup
  */
-export const buttonPressPlugin = (keyName: string = defaultKeyName) => ({
+export const buttonPressPlugin = (
+	keyName: string = defaultKeyName,
+	blockingKey: string = defaultBlockingKeyName, // todo maybe I should check if any other key is pressed?
+) => ({
 	name: 'showOnButtonPress',
 	defaultValue: true,
 	fn(instance: Tippy) {
@@ -39,7 +43,7 @@ export const buttonPressPlugin = (keyName: string = defaultKeyName) => ({
 				return
 			}
 
-			if (!isKeyDown(keyName)) return false
+			if (!isKeyDown(keyName) || blockingKey && isKeyDown(blockingKey)) return false
 		}
 
 		const keyDownHandler = (e: KeyboardEvent) => {
