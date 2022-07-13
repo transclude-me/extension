@@ -89,5 +89,10 @@
 		"stylelint-config-xo": "^0.20.0",
 		"typescript": "^4.6.2",
 		"xo": "^0.44.0"
+	},
+	"@parcel/bundler-default": {
+		"minBundles": 10000000,
+		"minBundleSize": 3000,
+		"maxParallelRequests": 20
 	}
 }
