@@ -28,7 +28,6 @@ export const StackedPage = (props: StackedPageProps) => {
 			left: ${40 * (props.pageOrder || 0)}px;
         	right: -585px;
         	position: sticky;
-        	background-color: yellow;
 		`}
 	>
 		<div className={'note-content'}>

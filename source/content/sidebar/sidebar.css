@@ -1,8 +1,18 @@
+:host {
+	--note-bg: #fafafa;
+}
+
+@media (prefers-color-scheme: dark) {
+	:host {
+		--note-bg: #092233;
+	}
+}
+
 .note-columns-scrolling-container {
 	height: 100%;
 }
 
-iframe{
+iframe {
 	height: 100%;
 }
 
@@ -24,8 +34,8 @@ iframe {
 
 	/*FF only :( */
 	/*todo*/
-	/*scrollbar-width: none;*/
-	/*scrollbar-color: var(--shadow) var(--note-bg);*/
+	scrollbar-width: none;
+	scrollbar-color: var(--shadow) var(--note-bg);
 }
 
 .note-content {
@@ -41,7 +51,6 @@ iframe {
 /* wrapped note */
 
 .note-container {
-	background: var(--note-bg);
 	transition: background 0.3s ease;
 }
 
@@ -102,40 +111,42 @@ iframe {
 	max-width: 100%;
 }
 
-/*@media screen and (min-width: 801px) {*/
-	.note-container {
-		transition: box-shadow 100ms linear, opacity 75ms linear,
-		transform 200ms cubic-bezier(0.19, 1, 0.22, 1);
-		flex-shrink: 0;
-		width: 625px;
-		max-width: 625px;
-		top: 0;
-		position: sticky;
-		flex-grow: 1;
-		border-left: 1px solid var(--separator);
-		padding: 0;
-	}
+.note-container {
+	transition: box-shadow 100ms linear, opacity 75ms linear,
+	transform 200ms cubic-bezier(0.19, 1, 0.22, 1);
+	flex-shrink: 0;
+	width: 625px;
+	max-width: 625px;
+	top: 0;
+	position: sticky;
+	flex-grow: 1;
+	border-left: 1px solid var(--separator);
+	padding: 0;
+}
 
-	.note-content {
-		/*overflow-y: auto;*/
-		height: 100%;
-		overflow-y: hidden;
-		overflow-x: hidden;
-		/*padding: 32px;*/
-	}
+.note-content {
+	height: 100%;
+	backdrop-filter: blur(10px);
+}
 
-	.note-container-overlay {
-		box-shadow: 0 0 15px 3px var(--shadow);
-	}
+.note-container-overlay {
+	box-shadow: 0 0 15px 3px var(--shadow);
+}
 
-	.note-container-obstructed .note-content {
-		opacity: 0;
-	}
-	.note-container-obstructed .obstructed-note-label {
-		opacity: 1;
-		pointer-events: all;
-	}
-/*}*/
+.note-container-obstructed .note-content {
+	opacity: 0;
+}
+
+.note-container-obstructed .obstructed-note-label {
+	opacity: 1;
+	pointer-events: all;
+	backdrop-filter: blur(3px);
+	border-color: #0da6a6;
+	border-width: 2px;
+	border-style: groove;
+	border-radius: 16px 4px 4px 16px;
+	margin-top: 1px;
+}
 
 .sidebar__drag {
 	width: 3px;
@@ -144,14 +155,12 @@ iframe {
 	top: 0;
 	bottom: 0;
 	border: 0 solid #E6E6E6;
-}
-@media (prefers-color-scheme: dark) {
-	.sidebar__drag {
-		border-color: #44464A;
-	}
+	left: 0;
+	padding-left: 3px;
 }
 
-.sidebar__drag {
-	border-left-width: 1px;
-	left: 0;
+.text-fragment-preview {
+	padding: 0.5em 0.5em;
+	overflow: auto;
+	background-color: var(--note-bg);
 }
