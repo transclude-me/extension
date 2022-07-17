@@ -31,6 +31,10 @@ To see the preview for a link, hover over the link with the `Alt` key pressed.
 
 ![](./media/fragment-preview.png)
 
+### Sliding panels sidebar previews
+
+![](./media/sliding-panels-extension-rc1.gif)
+
 ## Development
 
 [link-webext-polyfill]: https://github.com/mozilla/webextension-polyfill
