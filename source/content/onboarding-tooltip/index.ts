@@ -10,7 +10,7 @@ const defaultKeyName = 'Alt'
 export async function showOnboardingTooltip(link: HTMLAnchorElement | HTMLAreaElement, root: Element) {
 	if (!await IntroShownCount.isOverLimit()) {
 		tippy(link, {
-			content: `Press "${defaultKeyName}" key while hovering over the link to see the preview`,
+			content: `Press "${defaultKeyName}" key while hovering over the link to see the preview. Press "Shift + ${defaultKeyName} to open the link in the sidebar"`,
 			appendTo: () => root,
 			onShow() {
 				IntroShownCount.increment()
