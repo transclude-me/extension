@@ -42,6 +42,7 @@ class BackgroundSimulation {
 		})
 	}
 
+	// todo make this call setup on-demand
 	async execute<T extends Command>(command: T): Promise<any> {
 		const commandId = this.initiateExecution(command)
 		return new Promise((resolve, reject) => {

@@ -1,3 +1,22 @@
 .text-fragment-preview {
 	padding: 1px 0.5em;
 }
+
+.icon-button-wrapper {
+	background-color: white;
+	border-radius: 99px;
+	padding-top: 3px;
+	padding-left: 5px;
+	padding-right: 1px;
+}
+
+.icon-button-wrapper > img {
+	height: 24px;
+}
+
+.link-preview-actions {
+	position: absolute;
+	top: -16px;
+	right: 21px;
+}
+
