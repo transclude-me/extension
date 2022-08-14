@@ -1,3 +1,5 @@
+@import 'npm:notyf/notyf.min.css';
+
 .link-with-preview::after {
 	text-decoration: none;
 	content: 'τ';

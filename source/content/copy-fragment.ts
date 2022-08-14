@@ -1,4 +1,3 @@
-import * as browser from 'webextension-polyfill'
 import {getStyleNodes} from '../style-extractor'
 import {lazy} from '../common/lazy'
 
@@ -18,16 +17,10 @@ document.addEventListener('contextmenu', event => {
 	latestContextElement = event.target as HTMLElement | undefined
 }, true)
 
-export const setupEventHandlers = () => {
-	browser.runtime.onMessage.addListener(async message => {
-		if (message.type === 'copy-page-fragment') return copyPageFragment().catch(console.error)
-	})
-}
-
 /**
  * todo save element link and selector to later be able to refresh it
  */
-async function copyPageFragment() {
+export async function copyPageFragment() {
 	const element = latestContextElement
 	if (!element) return
 
