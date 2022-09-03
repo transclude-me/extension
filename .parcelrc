@@ -4,5 +4,9 @@
 	"*.{ts,tsx}": [
 	  "@parcel/validator-typescript"
 	]
+  },
+  "transformers": {
+	"jsx:*.svg": ["...", "@parcel/transformer-svg-react"],
+	"jsx:*": ["..."]
   }
 }

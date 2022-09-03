@@ -72,6 +72,10 @@ const buildSidebarStyles = ({maxWidth, width}: { maxWidth: number; width: string
 	bmCross: {
 		background: '#bdc3c7',
 	},
+	bmCrossButton: {
+		left: '-2em',
+		top: '0.5em',
+	},
 	bmMenuWrap: {
 		zIndex: 99999,
 		top: '0px',

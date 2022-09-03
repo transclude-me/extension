@@ -9,6 +9,7 @@ export interface StackedPageContainerProps extends HTMLAttributes<HTMLDivElement
 
 export interface StackedPageContainerHandle {
 	addPage(newPage: string): void
+	closePage(index: number): void
 	pageCount(): number
 }
 
@@ -19,6 +20,12 @@ const obstructedOffset = 120
 const StackedPageContainerInternal = (props: StackedPageContainerProps, ref: Ref<StackedPageContainerHandle>) => {
 	const [links, setLinks] = useState(props.initialLinks || [])
 	const [scroll, containerWidth, setRef, containerRef] = useScroll()
+
+	const closePage = (index: number) => {
+		const newLinks = [...links]
+		newLinks.splice(index, 1)
+		setLinks(newLinks)
+	}
 
 	useImperativeHandle(ref, () => ({
 		addPage(newPage: string) {
@@ -35,6 +42,7 @@ const StackedPageContainerInternal = (props: StackedPageContainerProps, ref: Ref
 		pageCount() {
 			return links.length
 		},
+		closePage,
 	}))
 
 	const numberOfPages = links.length
@@ -69,9 +77,10 @@ const StackedPageContainerInternal = (props: StackedPageContainerProps, ref: Ref
 			{
 				links.map((it, idx) =>
 					<LinkRendererStackedPage
-						key={idx}
+						key={it}
 						url={it}
 						pageOrder={idx}
+						close={() => closePage(idx)}
 						visibility={derivePageState(idx, numberOfPages)}
 					/>)
 			}

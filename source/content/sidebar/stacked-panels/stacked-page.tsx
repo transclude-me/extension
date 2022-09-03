@@ -4,6 +4,7 @@ import {render} from 'link-summoner'
 import {getExtensionRenderers} from '../../renderer-configuration'
 import {RawElementAdapter} from '../../../rendering/components/RawElementAdapter'
 import {openUrlInSidebar} from '../common'
+import CloseIcon from 'jsx:../../../assets/icons/close.svg'
 
 export interface StackedPageVisibilityProps {
 	obstructed?: boolean
@@ -20,9 +21,22 @@ export interface StackedPageProps extends HTMLAttributes<HTMLDivElement> {
 	close?: () => void
 }
 
-export const StackedPage = (props: StackedPageProps) => {
+interface CloseButtonProps {
+	onClick: () => void
+}
 
-	return <div
+const CloseButton = ({onClick}: CloseButtonProps) => <CloseIcon
+	css={css`
+	width: 24px;
+height: 24px;
+cursor: pointer;
+filter: invert(50%)
+`}
+	onClick={onClick}
+/>
+
+export const StackedPage = (props: StackedPageProps) =>
+	<div
 		className={noteContainerClassName(props.visibility)}
 		css={css`
 			left: ${40 * (props.pageOrder || 0)}px;
@@ -30,6 +44,16 @@ export const StackedPage = (props: StackedPageProps) => {
         	position: sticky;
 		`}
 	>
+		<div css={{
+			position: 'absolute',
+			top: '0.5em',
+			right: '1.1em',
+			zIndex: 1,
+			display: 'flex',
+		}}>
+			{props.close && <CloseButton onClick={props.close}/>}
+		</div>
+
 		<div className={'note-content'}>
 			{props.children}
 		</div>
@@ -43,7 +67,6 @@ export const StackedPage = (props: StackedPageProps) => {
 			</span>
 		</div>
 	</div>
-}
 
 export interface LinkRendererStackedPageProps extends StackedPageProps {
 	url: string
