@@ -8,7 +8,7 @@ import {useVariableWidth} from './variable-width'
 export const Sidebar = () => {
 	// todo show a loading indicator instead of emptiness
 	const [isOpen, setOpen] = useState(false)
-	const {width, endDrag, startDrag, updateDrag} = useVariableWidth(window.innerWidth * 0.4)
+	const {width, endDrag, startDrag, updateDrag} = useVariableWidth(window.innerWidth * 0.6)
 	const containerRef = useRef<StackedPageContainerHandle | null>(null)
 
 	useEffect(() => {
