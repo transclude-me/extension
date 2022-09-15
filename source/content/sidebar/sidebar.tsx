@@ -13,7 +13,6 @@ export const Sidebar = () => {
 
 	useEffect(() => {
 		const messageCallback = (event: any) => {
-			console.log('content-script sidebar', event)
 			if (event.type === 'add-stack-url') {
 				containerRef.current?.addPage(event.url)
 				setOpen(true)

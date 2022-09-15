@@ -24,7 +24,8 @@
 		"<all_urls>",
 		"storage",
 		"contextMenus",
-		"clipboardWrite"
+		"clipboardWrite",
+		"history"
 	],
 	"content_scripts": [
 		{

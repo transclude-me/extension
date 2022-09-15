@@ -23,4 +23,8 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
 
 browser.runtime.onMessage.addListener((request, sender) => {
 	if (request.type === 'push-to-instapaper') return pushToInstapaper(request, sender)
+
+	if (request.type === 'add-to-history') return addToHistory(request.url)
 })
+
+const addToHistory = (url: string) => browser.history.addUrl({url})
