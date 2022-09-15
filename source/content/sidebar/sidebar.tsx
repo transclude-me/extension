@@ -47,9 +47,7 @@ export const Sidebar = () => {
 		// @ts-ignore
 		styles={buildSidebarStyles({
 			maxWidth: width,
-			// todo this is a hack, because if I keep it auto the close button stays visible
-			//  all the time (even when sidebar closed) for some reason
-			width: containerRef.current?.pageCount() ? 'auto' : '300px',
+			isOpen,
 		})}
 		// This is mainly here to ensure that when menu is closed
 		// by internal element logic we're aware and maintain proper state
@@ -65,7 +63,12 @@ export const Sidebar = () => {
 	</Slider>
 }
 
-const buildSidebarStyles = ({maxWidth, width}: { maxWidth: number; width: string | undefined }) => ({
+interface StyleProps {
+	maxWidth: number
+	isOpen: boolean
+}
+
+const buildSidebarStyles = ({maxWidth, isOpen}: StyleProps) => ({
 	bmMenu: {
 		overflow: 'hidden',
 	},
@@ -75,11 +78,12 @@ const buildSidebarStyles = ({maxWidth, width}: { maxWidth: number; width: string
 	bmCrossButton: {
 		left: '-2em',
 		top: '0.5em',
+		visibility: isOpen ? 'visible' : 'hidden',
 	},
 	bmMenuWrap: {
 		zIndex: 99999,
 		top: '0px',
-		width,
+		width: 'auto',
 		display: 'flex',
 		maxWidth: `${maxWidth}px`,
 	},
