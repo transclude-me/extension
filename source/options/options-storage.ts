@@ -2,7 +2,7 @@ import OptionsSync from 'webext-options-sync'
 import {defaultAllowSubdomainsFrom, defaultWhitelistDomains} from 'link-summoner/src/rendering/iframe-renderer'
 
 const defaults = {
-	renderBlocklist: 'gwern.net, wikipedia.org, youtube.com, roam.garden',
+	renderBlocklist: 'gwern.net, youtube.com, roam.garden',
 	iframeDomainWhitelist: defaultWhitelistDomains.join(', '),
 	iframeSubdomainWhitelist: defaultAllowSubdomainsFrom.join(', '),
 }
