@@ -2,6 +2,8 @@ import {css} from '@emotion/react'
 import {LinkRendererStackedPage, StackedPageVisibilityProps} from './stacked-page'
 import {forwardRef, HTMLAttributes, MutableRefObject, Ref, useImperativeHandle, useState} from 'react'
 import {useScroll} from './hooks'
+import {CloseButton} from './action-buttons'
+import {InstapaperButton} from './action-buttons'
 
 export interface StackedPageContainerProps extends HTMLAttributes<HTMLDivElement> {
 	initialLinks?: string[]
@@ -9,7 +11,9 @@ export interface StackedPageContainerProps extends HTMLAttributes<HTMLDivElement
 
 export interface StackedPageContainerHandle {
 	addPage(newPage: string): void
+
 	closePage(index: number): void
+
 	pageCount(): number
 }
 
@@ -80,7 +84,10 @@ const StackedPageContainerInternal = (props: StackedPageContainerProps, ref: Ref
 						key={it}
 						url={it}
 						pageOrder={idx}
-						close={() => closePage(idx)}
+						pageActions={[
+							<InstapaperButton key="instapaper" url={it}/>,
+							<CloseButton key="close" onClick={() => closePage(idx)}/>,
+						]}
 						visibility={derivePageState(idx, numberOfPages)}
 					/>)
 			}

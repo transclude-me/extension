@@ -4,7 +4,6 @@ import {render} from 'link-summoner'
 import {getExtensionRenderers} from '../../renderer-configuration'
 import {RawElementAdapter} from '../../../rendering/components/RawElementAdapter'
 import {openUrlInSidebar} from '../common'
-import CloseIcon from 'jsx:../../../assets/icons/close.svg'
 
 export interface StackedPageVisibilityProps {
 	obstructed?: boolean
@@ -18,22 +17,8 @@ export interface StackedPageProps extends HTMLAttributes<HTMLDivElement> {
 	pageOrder?: number
 	pageName?: string
 	activate?: () => void
-	close?: () => void
+	pageActions?: JSX.Element[]
 }
-
-interface CloseButtonProps {
-	onClick: () => void
-}
-
-const CloseButton = ({onClick}: CloseButtonProps) => <CloseIcon
-	css={css`
-	width: 24px;
-height: 24px;
-cursor: pointer;
-filter: invert(50%)
-`}
-	onClick={onClick}
-/>
 
 export const StackedPage = (props: StackedPageProps) =>
 	<div
@@ -50,8 +35,13 @@ export const StackedPage = (props: StackedPageProps) =>
 			right: '1.1em',
 			zIndex: 1,
 			display: 'flex',
+			backdropFilter: 'blur(3px)',
+			borderStyle: 'inset',
+			borderRadius: '66px',
+			padding: '3px',
+			borderWidth: '1px',
 		}}>
-			{props.close && <CloseButton onClick={props.close}/>}
+			{props.pageActions}
 		</div>
 
 		<div className={'note-content'}>
