@@ -8,7 +8,8 @@
 </a>
 
 
-Make web more context rich by enabling in-place context-specific previews for links.
+Make web more context rich by enabling in-place rabbithole exploration mode (sliding tabs UI) & context-specific previews for links.
+You can save URLs to **Instapaper** from the preview or sliding pane view.
 
 Supported link types:
 
@@ -22,6 +23,11 @@ extension.
 
 ## Usage
 
+### tldr:
+- Hover over the link with `Alt` key pressed to see the live preview.
+- Click on the link with `Shift+Alt` keys pressed to open the link in the sliding pane view.
+---
+
 After installing the extension - supported links should get a `τ` indicator suffix to signify that
 this link has a preview.
 
@@ -29,11 +35,15 @@ this link has a preview.
 
 To see the preview for a link, hover over the link with the `Alt` key pressed.
 
-![](./media/fragment-preview.png)
+![](media/fragment-preview-2.png)
+
+(You get actions to save the link to Instapaper or open it in the sliding pane view at the top of preview pane)
 
 ### Sliding panels sidebar previews
 
-![](./media/sliding-panels-extension-rc1.gif)
+This demonstrates sliding panels view & how live preview, Instapaper saving & sliding panes view work together.
+
+![](./media/transclude-me-extension-demo.gif)
 
 ## Development
 
